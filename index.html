@@ -3,91 +3,106 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ashwini Neuro Super Speciality Center</title>
+  <title>Ashwini Neuro Center</title>
 
-  <!-- Tailwind CSS CDN -->
+  <!-- 🧠 Cache Control -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+
+  <!-- ✅ Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Custom CSS -->
-  <link rel="stylesheet" href="./assets/css/style.css">
+  <!-- 🩵 Favicon -->
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/2966/2966481.png" />
 </head>
-<body class="bg-gray-50 text-gray-900 min-h-screen flex flex-col">
-
-  <!-- ================= HEADER ================= -->
-  <header class="bg-white shadow sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto flex justify-between items-center p-4">
-      <div class="flex items-center space-x-2">
-        <img src="./assets/images/logo.png" alt="Hospital Logo" class="w-8 h-8">
-        <h1 class="font-bold text-lg">Ashwini Neuro Center</h1>
-      </div>
-
-      <nav class="space-x-4 hidden md:flex">
-        <a href="index.html" class="hover:text-blue-600 font-medium">Home</a>
-        <a href="admin.html" class="hover:text-blue-600 font-medium">Admin</a>
-        <a href="contact.html" class="hover:text-blue-600 font-medium">Contact</a>
-      </nav>
-
-      <div class="flex items-center space-x-2">
-        <label for="lang" class="text-sm font-medium">Ln:</label>
-        <select id="lang" class="border border-gray-300 rounded px-2 py-1 text-sm">
-          <option value="en" selected>English</option>
-          <option value="te">Telugu</option>
-        </select>
-      </div>
-    </div>
+<body class="bg-gray-50 min-h-screen flex flex-col items-center">
+  <!-- 🌟 Header -->
+  <header class="w-full bg-white shadow p-4 flex justify-between items-center">
+    <h1 class="text-xl md:text-2xl font-bold text-gray-800 flex items-center">
+      <img src="https://cdn-icons-png.flaticon.com/512/2966/2966481.png" class="w-8 h-8 mr-2" alt="logo" />
+      Ashwini Neuro Center
+    </h1>
+    <nav class="space-x-4 text-gray-700">
+      <a href="index.html" class="hover:text-blue-600 font-medium">Home</a>
+      <a href="admin.html" class="hover:text-blue-600 font-medium">Admin</a>
+      <a href="#" class="hover:text-blue-600 font-medium">Contact</a>
+    </nav>
   </header>
 
-  <!-- ================= MAIN CONTENT ================= -->
-  <main class="flex-1 px-4 py-6 flex flex-col items-center justify-center space-y-8">
-
-  <!-- OP Summary Section -->
-  <section id="op-summary" class="grid grid-cols-1 md:grid-cols-3 gap-4 w-full max-w-5xl">
-    <div class="bg-white p-4 rounded-2xl shadow text-center">
-      <h3 id="lblTotalOp" class="text-sm font-medium text-gray-500">Total OP Count</h3>
-      <p id="opCount" class="text-3xl font-bold text-blue-600 mt-1">132</p>
+  <!-- 🧾 Stats Section -->
+  <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8 w-11/12 md:w-4/5">
+    <div class="bg-white shadow-md rounded-2xl p-6 text-center">
+      <h2 class="text-gray-500 text-lg">Total OP Count</h2>
+      <p id="totalOP" class="text-4xl font-bold text-blue-600 mt-2">0</p>
     </div>
-
-    <div class="bg-white p-4 rounded-2xl shadow text-center">
-      <h3 id="lblFirstConsult" class="text-sm font-medium text-gray-500">1st Consultation Done</h3>
-      <p id="firstConsult" class="text-3xl font-bold text-green-600 mt-1">78</p>
+    <div class="bg-white shadow-md rounded-2xl p-6 text-center">
+      <h2 class="text-gray-500 text-lg">1st Consultation Done</h2>
+      <p id="firstConsult" class="text-4xl font-bold text-green-600 mt-2">0</p>
     </div>
-
-    <div class="bg-white p-4 rounded-2xl shadow text-center">
-      <h3 id="lblSecondConsult" class="text-sm font-medium text-gray-500">2nd Consultation Done</h3>
-      <p id="secondConsult" class="text-3xl font-bold text-purple-600 mt-1">49</p>
+    <div class="bg-white shadow-md rounded-2xl p-6 text-center">
+      <h2 class="text-gray-500 text-lg">2nd Consultation Done</h2>
+      <p id="secondConsult" class="text-4xl font-bold text-purple-600 mt-2">0</p>
     </div>
   </section>
 
-  <!-- Current Consultation Info -->
-  <section id="consulting-section"
-    class="bg-white p-6 rounded-2xl shadow max-w-3xl w-full text-center">
-    <h2 id="lblNowConsulting" class="text-lg font-semibold mb-4">Now Consulting</h2>
-    <p><span id="lblDoctor">Doctor:</span> <span id="currentDoctor" class="font-medium">Dr. Kavitha (Neuro)</span></p>
-    <p><span id="lblPatient">Patient:</span> <span id="currentPatient" class="font-medium">Ravi Kumar</span> (OP No: <span id="currentOp">0271</span>)</p>
+  <!-- 🩺 Now Consulting Section -->
+  <section class="bg-white shadow-md rounded-2xl p-8 mt-10 w-11/12 md:w-2/3 text-center">
+    <h2 class="text-xl font-semibold text-gray-800 mb-4">Now Consulting</h2>
+    <p class="text-gray-700" id="nowDoctor">Doctor: —</p>
+    <p class="text-gray-700" id="nowPatient">Patient: —</p>
 
-    <div class="mt-3 border-t pt-3">
-      <h3 id="lblNextQueue" class="font-medium">Next in Queue:</h3>
-      <p><span id="nextPatient" class="font-medium">Lakshmi Devi</span> (OP No: <span id="nextOp">0272</span>)</p>
-    </div>
-  </section>
+    <hr class="my-4" />
 
-  <!-- Track OP Button -->
-  <div class="text-center">
-    <button id="trackOpBtn"
-      class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-all">
+    <p class="text-gray-700">Next in Queue:</p>
+    <p class="text-gray-900 font-medium" id="nextPatient">—</p>
+
+    <button
+      id="trackButton"
+      class="mt-6 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold shadow-md"
+    >
       Track My OP Status
     </button>
-  </div>
+  </section>
 
-</main>
+  <!-- 🔗 JS -->
+  <script>
+    const API_URL = "https://hospital-server-p4gy.onrender.com"; // Your live backend API
 
-  <!-- ================= FOOTER ================= -->
-  <footer class="bg-white text-center p-4 border-t text-sm text-gray-500">
-    © 2025 Ashwini Neuro Super Speciality Center, Nellore | Emergency: 108
-  </footer>
+    async function fetchStats() {
+      try {
+        const res = await fetch(\`\${API_URL}/api/stats\`);
+        const data = await res.json();
+        document.getElementById("totalOP").textContent = data.total;
+        document.getElementById("firstConsult").textContent = data.first;
+        document.getElementById("secondConsult").textContent = data.second;
+      } catch (err) {
+        console.error("Error fetching stats:", err);
+      }
+    }
 
-  <!-- ================= SCRIPTS ================= -->
-  <script src="./assets/js/index.js"></script>
+    async function fetchNowConsulting() {
+      try {
+        const res = await fetch(\`\${API_URL}/api/getOPs\`);
+        const ops = await res.json();
 
+        if (ops.length > 0) {
+          const current = ops[ops.length - 1];
+          const next = ops.length > 1 ? ops[ops.length - 2] : null;
+
+          document.getElementById("nowDoctor").textContent = \`Doctor: \${current.doctorName}\`;
+          document.getElementById("nowPatient").textContent = \`Patient: \${current.patientName} (OP No: \${current.opNumber})\`;
+          document.getElementById("nextPatient").textContent = next
+            ? \`\${next.patientName} (OP No: \${next.opNumber})\`
+            : "—";
+        }
+      } catch (err) {
+        console.error("Error fetching OP data:", err);
+      }
+    }
+
+    fetchStats();
+    fetchNowConsulting();
+  </script>
 </body>
 </html>
