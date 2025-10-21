@@ -16,6 +16,7 @@
   <!-- 🩵 Favicon -->
   <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/2966/2966481.png" />
 </head>
+
 <body class="bg-gray-50 min-h-screen flex flex-col items-center">
   <!-- 🌟 Header -->
   <header class="w-full bg-white shadow p-4 flex justify-between items-center">
@@ -46,6 +47,14 @@
     </div>
   </section>
 
+  <!-- 🩵 OP Booking Button Section -->
+  <section class="mt-10 w-11/12 md:w-2/3 flex justify-center">
+    <a href="op-booking.html"
+      class="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold shadow-md text-lg transition-all duration-300">
+      Book OP Appointment
+    </a>
+  </section>
+
   <!-- 🩺 Now Consulting Section -->
   <section class="bg-white shadow-md rounded-2xl p-8 mt-10 w-11/12 md:w-2/3 text-center">
     <h2 class="text-xl font-semibold text-gray-800 mb-4">Now Consulting</h2>
@@ -59,8 +68,7 @@
 
     <button
       id="trackButton"
-      class="mt-6 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold shadow-md"
-    >
+      class="mt-6 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold shadow-md">
       Track My OP Status
     </button>
   </section>
@@ -71,7 +79,7 @@
 
     async function fetchStats() {
       try {
-        const res = await fetch(\`\${API_URL}/api/stats\`);
+        const res = await fetch(`${API_URL}/api/stats`);
         const data = await res.json();
         document.getElementById("totalOP").textContent = data.total;
         document.getElementById("firstConsult").textContent = data.first;
@@ -83,17 +91,17 @@
 
     async function fetchNowConsulting() {
       try {
-        const res = await fetch(\`\${API_URL}/api/getOPs\`);
+        const res = await fetch(`${API_URL}/api/getOPs`);
         const ops = await res.json();
 
         if (ops.length > 0) {
           const current = ops[ops.length - 1];
           const next = ops.length > 1 ? ops[ops.length - 2] : null;
 
-          document.getElementById("nowDoctor").textContent = \`Doctor: \${current.doctorName}\`;
-          document.getElementById("nowPatient").textContent = \`Patient: \${current.patientName} (OP No: \${current.opNumber})\`;
+          document.getElementById("nowDoctor").textContent = `Doctor: ${current.doctorName}`;
+          document.getElementById("nowPatient").textContent = `Patient: ${current.patientName} (OP No: ${current.opNumber})`;
           document.getElementById("nextPatient").textContent = next
-            ? \`\${next.patientName} (OP No: \${next.opNumber})\`
+            ? `${next.patientName} (OP No: ${next.opNumber})`
             : "—";
         }
       } catch (err) {
