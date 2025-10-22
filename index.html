@@ -45,13 +45,6 @@
           <option value="en">English</option>
         </select>
       </div>
-
-      <!-- 🔙 Back Button -->
-      <button onclick="goBack()" class="absolute right-2 top-4 md:top-2 bg-blue-50 hover:bg-blue-100 p-2 rounded-full transition">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-        </svg>
-      </button>
     </div>
 
     <!-- 🧭 Desktop Buttons -->
@@ -111,16 +104,13 @@
      నా ఓపి స్థితిని ట్రాక్ చేయండి
   </a>
 
+  <!-- 🌐 Script -->
   <script>
     const API_URL = "https://hospital-server-p4gy.onrender.com";
     const langSelect = document.getElementById("langSelect");
 
-    function goBack() {
-      window.history.back();
-    }
-
     function handleEmergencyClick() {
-      window.location.href = "emergency.html"; // placeholder for emergency page
+      window.location.href = "emergency.html"; // Placeholder for your emergency page
     }
 
     const translations = {
@@ -147,8 +137,6 @@
       const t = translations[lang];
       document.getElementById("title").textContent = t.title;
       document.getElementById("consultingTitle").textContent = t.consulting;
-
-      // Update label and preserve the doctor’s name
       document.getElementById("nowDoctor").innerHTML = `${t.doctor} <strong>Dr. A Yugandhar Reddy</strong>`;
       document.getElementById("nowPatient").textContent = t.patient + " —";
       document.getElementById("nextLabel").textContent = t.next;
@@ -168,8 +156,6 @@
           const current = ops[ops.length - 1];
           const next = ops.length > 1 ? ops[ops.length - 2] : null;
           const lang = localStorage.getItem("userLang") || "te";
-
-          // Keep Dr. Yugandhar Reddy if backend doctor name missing
           const doctorName = current.doctorName || "Dr. A Yugandhar Reddy";
 
           if (lang === "te") {
