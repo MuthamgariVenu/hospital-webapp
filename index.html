@@ -104,18 +104,23 @@
      నా ఓపి స్థితిని ట్రాక్ చేయండి
   </a>
 
-  <!-- 🌐 Script -->
+  <!-- 🌐 JS -->
   <script>
     const API_URL = "https://hospital-server-p4gy.onrender.com";
     const langSelect = document.getElementById("langSelect");
 
     function handleEmergencyClick() {
-      window.location.href = "emergency.html"; // Placeholder for your emergency page
+      window.location.href = "emergency.html";
     }
 
+    // 🧩 Translations
     const translations = {
       te: {
         title: "అశ్విని న్యూరో సెంటర్",
+        opBooking: "ఓపి బుకింగ్",
+        service: "సేవ",
+        admin: "అడ్మిన్",
+        alert: "🚨 అత్యవసర కేసు: ఓపి లేకుండా నేరుగా కన్సల్టెంట్ వద్ద – డా. సురేష్ కుమార్, గది నం. 3",
         consulting: "ప్రస్తుతం కన్సల్టింగ్",
         doctor: "డాక్టర్:",
         patient: "రోగి:",
@@ -124,6 +129,10 @@
       },
       en: {
         title: "Ashwini Neuro Center",
+        opBooking: "OP Booking",
+        service: "Service",
+        admin: "Admin",
+        alert: "🚨 Emergency: Direct Consultant Case – Dr. Suresh Kumar, Room No. 3",
         consulting: "Now Consulting",
         doctor: "Doctor:",
         patient: "Patient:",
@@ -132,10 +141,21 @@
       }
     };
 
+    // 🈂️ Switch Language Function
     function switchLanguage(lang) {
       localStorage.setItem("userLang", lang);
       const t = translations[lang];
+
       document.getElementById("title").textContent = t.title;
+      document.getElementById("opBookingBtn").querySelector("span").textContent = t.opBooking;
+      document.getElementById("serviceBtn").querySelector("span").textContent = t.service;
+      document.getElementById("adminBtn").querySelector("span").textContent = t.admin;
+
+      document.getElementById("opBookingBtnMobile").querySelector("span").textContent = t.opBooking;
+      document.getElementById("serviceBtnMobile").querySelector("span").textContent = t.service;
+      document.getElementById("adminBtnMobile").querySelector("span").textContent = t.admin;
+
+      document.getElementById("emergencyAlert").textContent = t.alert;
       document.getElementById("consultingTitle").textContent = t.consulting;
       document.getElementById("nowDoctor").innerHTML = `${t.doctor} <strong>Dr. A Yugandhar Reddy</strong>`;
       document.getElementById("nowPatient").textContent = t.patient + " —";
@@ -148,6 +168,7 @@
     switchLanguage(savedLang);
     langSelect.addEventListener("change", (e) => switchLanguage(e.target.value));
 
+    // 🧠 Fetch OP Data
     async function fetchOPData() {
       try {
         const res = await fetch(`${API_URL}/api/getOPs`);
