@@ -12,8 +12,6 @@
 
   <!-- ✅ Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- ✅ Favicon -->
   <link rel="icon" href="./assets/images/logo.png" type="image/png" />
 
   <style>
@@ -33,7 +31,6 @@
 
   <!-- 🌟 Header -->
   <header class="w-full bg-white shadow p-4 flex flex-col md:flex-row md:items-center md:justify-between relative">
-    <!-- 🏥 Logo + Title -->
     <div class="flex items-center justify-between md:justify-start space-x-2 w-full md:w-auto">
       <div class="flex items-center space-x-2">
         <img src="./assets/images/logo.png" class="w-10 h-10 mr-2 rounded-full shadow-sm" alt="logo" />
@@ -41,13 +38,20 @@
       </div>
 
       <!-- 🌐 Language Dropdown -->
-      <div class="md:absolute md:right-6">
+      <div class="md:absolute md:right-14 flex items-center">
         <span class="text-gray-600 font-medium mr-1">Ln</span>
         <select id="langSelect" class="border border-gray-300 rounded-md px-2 py-1 text-sm focus:outline-none">
           <option value="te" selected>తెలుగు</option>
           <option value="en">English</option>
         </select>
       </div>
+
+      <!-- 🔙 Back Button -->
+      <button onclick="goBack()" class="absolute right-2 top-4 md:top-2 bg-blue-50 hover:bg-blue-100 p-2 rounded-full transition">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
     </div>
 
     <!-- 🧭 Desktop Buttons -->
@@ -84,7 +88,7 @@
   </nav>
 
   <!-- 🚨 Emergency Alert -->
-  <section class="w-11/12 md:w-3/4 mt-4 bg-white border border-gray-200 shadow rounded-xl overflow-hidden">
+  <section onclick="handleEmergencyClick()" class="cursor-pointer w-11/12 md:w-3/4 mt-4 bg-white border border-gray-200 shadow rounded-xl overflow-hidden hover:bg-gray-50 transition">
     <div id="emergencyAlert" class="scroll-text px-4 py-2 text-red-600 font-semibold text-sm md:text-base">
       🚨 అత్యవసర కేసు: ఓపి లేకుండా నేరుగా కన్సల్టెంట్ వద్ద – డా. సురేష్ కుమార్, గది నం. 3
     </div>
@@ -93,11 +97,9 @@
   <!-- 🩺 Now Consulting Section -->
   <section class="bg-white shadow-md rounded-2xl p-8 mt-10 w-11/12 md:w-2/3 text-center">
     <h2 id="consultingTitle" class="text-xl font-semibold text-gray-800 mb-4">ప్రస్తుతం కన్సల్టింగ్</h2>
-    <p class="text-gray-700" id="nowDoctor">డాక్టర్: —</p>
+    <p class="text-gray-700" id="nowDoctor">డాక్టర్: Dr. A Yugandhar Reddy</p>
     <p class="text-gray-700" id="nowPatient">రోగి: —</p>
-
     <hr class="my-4" />
-
     <p class="text-gray-700" id="nextLabel">తదుపరి క్యూలో:</p>
     <p class="text-gray-900 font-medium" id="nextPatient">—</p>
   </section>
@@ -109,18 +111,21 @@
      నా ఓపి స్థితిని ట్రాక్ చేయండి
   </a>
 
-  <!-- 🌐 JS -->
   <script>
+    const API_URL = "https://hospital-server-p4gy.onrender.com";
     const langSelect = document.getElementById("langSelect");
-    const trackBtn = document.getElementById("trackButton");
+
+    function goBack() {
+      window.history.back();
+    }
+
+    function handleEmergencyClick() {
+      window.location.href = "emergency.html"; // placeholder for emergency page
+    }
 
     const translations = {
       te: {
         title: "అశ్విని న్యూరో సెంటర్",
-        opBooking: "ఓపి బుకింగ్",
-        service: "సేవ",
-        admin: "అడ్మిన్",
-        alert: "🚨 అత్యవసర కేసు: ఓపి లేకుండా నేరుగా కన్సల్టెంట్ వద్ద – డా. సురేష్ కుమార్, గది నం. 3",
         consulting: "ప్రస్తుతం కన్సల్టింగ్",
         doctor: "డాక్టర్:",
         patient: "రోగి:",
@@ -129,10 +134,6 @@
       },
       en: {
         title: "Ashwini Neuro Center",
-        opBooking: "OP Booking",
-        service: "Service",
-        admin: "Admin",
-        alert: "🚨 Emergency: No OP — Direct Consultant Case. Dr. Suresh Kumar attending – Room 3",
         consulting: "Now Consulting",
         doctor: "Doctor:",
         patient: "Patient:",
@@ -144,30 +145,22 @@
     function switchLanguage(lang) {
       localStorage.setItem("userLang", lang);
       const t = translations[lang];
-
       document.getElementById("title").textContent = t.title;
-      document.querySelectorAll("#opBookingBtn span, #opBookingBtnMobile span").forEach(e => e.textContent = t.opBooking);
-      document.querySelectorAll("#serviceBtn span, #serviceBtnMobile span").forEach(e => e.textContent = t.service);
-      document.querySelectorAll("#adminBtn span, #adminBtnMobile span").forEach(e => e.textContent = t.admin);
-      document.getElementById("emergencyAlert").textContent = t.alert;
       document.getElementById("consultingTitle").textContent = t.consulting;
-      document.getElementById("nowDoctor").textContent = t.doctor + " —";
+
+      // Update label and preserve the doctor’s name
+      document.getElementById("nowDoctor").innerHTML = `${t.doctor} <strong>Dr. A Yugandhar Reddy</strong>`;
       document.getElementById("nowPatient").textContent = t.patient + " —";
       document.getElementById("nextLabel").textContent = t.next;
-      trackBtn.textContent = t.track;
+      document.getElementById("trackButton").textContent = t.track;
     }
 
-    // Apply saved language or default Telugu
     const savedLang = localStorage.getItem("userLang") || "te";
     langSelect.value = savedLang;
     switchLanguage(savedLang);
-
-    // Listen for language change
     langSelect.addEventListener("change", (e) => switchLanguage(e.target.value));
 
-    // 🧠 Backend Logic
-    const API_URL = "https://hospital-server-p4gy.onrender.com";
-    async function fetchNowConsulting() {
+    async function fetchOPData() {
       try {
         const res = await fetch(`${API_URL}/api/getOPs`);
         const ops = await res.json();
@@ -175,13 +168,18 @@
           const current = ops[ops.length - 1];
           const next = ops.length > 1 ? ops[ops.length - 2] : null;
           const lang = localStorage.getItem("userLang") || "te";
+
+          // Keep Dr. Yugandhar Reddy if backend doctor name missing
+          const doctorName = current.doctorName || "Dr. A Yugandhar Reddy";
+
           if (lang === "te") {
-            document.getElementById("nowDoctor").textContent = `డాక్టర్: ${current.doctorName}`;
+            document.getElementById("nowDoctor").textContent = `డాక్టర్: ${doctorName}`;
             document.getElementById("nowPatient").textContent = `రోగి: ${current.patientName} (ఓపి నం: ${current.opNumber})`;
           } else {
-            document.getElementById("nowDoctor").textContent = `Doctor: ${current.doctorName}`;
+            document.getElementById("nowDoctor").textContent = `Doctor: ${doctorName}`;
             document.getElementById("nowPatient").textContent = `Patient: ${current.patientName} (OP No: ${current.opNumber})`;
           }
+
           document.getElementById("nextPatient").textContent = next
             ? `${next.patientName} (${lang === "te" ? "ఓపి నం" : "OP No"}: ${next.opNumber})`
             : "—";
@@ -191,7 +189,7 @@
       }
     }
 
-    fetchNowConsulting();
+    fetchOPData();
   </script>
 </body>
 </html>
