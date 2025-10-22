@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>అశ్విని న్యూరో సెంటర్</title>
+  <title>అశ్విని న్యూరో సెంటర్ | Ashwini Neuro Center</title>
 
   <!-- Cache Control -->
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
@@ -41,7 +41,7 @@
       <div class="md:absolute md:right-14 flex items-center">
         <span class="text-gray-600 font-medium mr-1">Ln</span>
         <select id="langSelect" class="border border-gray-300 rounded-md px-2 py-1 text-sm focus:outline-none">
-          <option value="te" selected>తెలుగు</option>
+          <option value="te">తెలుగు</option>
           <option value="en">English</option>
         </select>
       </div>
@@ -90,11 +90,12 @@
   <!-- 🩺 Now Consulting Section -->
   <section class="bg-white shadow-md rounded-2xl p-8 mt-10 w-11/12 md:w-2/3 text-center">
     <h2 id="consultingTitle" class="text-xl font-semibold text-gray-800 mb-4">ప్రస్తుతం కన్సల్టింగ్</h2>
-    <p class="text-gray-700" id="nowDoctor">డాక్టర్: Dr. A Yugandhar Reddy</p>
+    <p class="text-gray-700" id="nowDoctor">వైద్యుడు: డా. ఏ యుగంధర్ రెడ్డి</p>
     <p class="text-gray-700" id="nowPatient">రోగి: —</p>
     <hr class="my-4" />
     <p class="text-gray-700" id="nextLabel">తదుపరి క్యూలో:</p>
     <p class="text-gray-900 font-medium" id="nextPatient">—</p>
+    <p id="totalPatients" class="text-gray-600 mt-3 text-sm">—</p>
   </section>
 
   <!-- 🧭 Track OP Button -->
@@ -113,7 +114,6 @@
       window.location.href = "emergency.html";
     }
 
-    // 🧩 Translations
     const translations = {
       te: {
         title: "అశ్విని న్యూరో సెంటర్",
@@ -122,9 +122,12 @@
         admin: "అడ్మిన్",
         alert: "🚨 అత్యవసర కేసు: ఓపి లేకుండా నేరుగా కన్సల్టెంట్ వద్ద – డా. సురేష్ కుమార్, గది నం. 3",
         consulting: "ప్రస్తుతం కన్సల్టింగ్",
-        doctor: "డాక్టర్:",
+        doctorLabel: "వైద్యుడు:",
+        doctorName: "డా. ఏ యుగంధర్ రెడ్డి",
         patient: "రోగి:",
         next: "తదుపరి క్యూలో:",
+        queue: "క్యూలో నం:",
+        total: "మొత్తం క్యూలో ఉన్నవారు:",
         track: "నా ఓపి స్థితిని ట్రాక్ చేయండి"
       },
       en: {
@@ -132,16 +135,54 @@
         opBooking: "OP Booking",
         service: "Service",
         admin: "Admin",
-        alert: "🚨 Emergency: Direct Consultant Case – Dr. Suresh Kumar, Room No. 3",
+        alert: "🚨 Emergency Case: Directly report to Dr. Suresh Kumar, Room No. 3",
         consulting: "Now Consulting",
-        doctor: "Doctor:",
+        doctorLabel: "Doctor:",
+        doctorName: "Dr. A Yugandhar Reddy",
         patient: "Patient:",
         next: "Next in Queue:",
+        queue: "Queue No:",
+        total: "Total Patients in Queue:",
         track: "Track My OP Status"
       }
     };
 
-    // 🈂️ Switch Language Function
+    async function fetchOPData() {
+      try {
+        const res = await fetch(`${API_URL}/api/getOPs`);
+        let ops = await res.json();
+
+        const today = new Date().toISOString().split("T")[0];
+        ops = ops.filter(op => op.createdAt && op.createdAt.startsWith(today));
+
+        updateUI(ops);
+      } catch (err) {
+        console.error("Error fetching OP data:", err);
+      }
+    }
+
+    function updateUI(ops) {
+      const lang = localStorage.getItem("userLang") || "te";
+      const t = translations[lang];
+
+      if (ops.length > 0) {
+        const current = ops[0];
+        const next = ops.length > 1 ? ops[1] : null;
+
+        document.getElementById("nowDoctor").textContent = `${t.doctorLabel} ${t.doctorName}`;
+        document.getElementById("nowPatient").textContent = `${t.patient} ${current.patientName} (${t.queue} 1)`;
+        document.getElementById("nextPatient").textContent = next
+          ? `${next.patientName} (${t.queue} 2)`
+          : "—";
+        document.getElementById("totalPatients").textContent = `${t.total} ${ops.length}`;
+      } else {
+        document.getElementById("nowDoctor").textContent = `${t.doctorLabel} ${t.doctorName}`;
+        document.getElementById("nowPatient").textContent = "—";
+        document.getElementById("nextPatient").textContent = "—";
+        document.getElementById("totalPatients").textContent = "";
+      }
+    }
+
     function switchLanguage(lang) {
       localStorage.setItem("userLang", lang);
       const t = translations[lang];
@@ -150,51 +191,22 @@
       document.getElementById("opBookingBtn").querySelector("span").textContent = t.opBooking;
       document.getElementById("serviceBtn").querySelector("span").textContent = t.service;
       document.getElementById("adminBtn").querySelector("span").textContent = t.admin;
-
       document.getElementById("opBookingBtnMobile").querySelector("span").textContent = t.opBooking;
       document.getElementById("serviceBtnMobile").querySelector("span").textContent = t.service;
       document.getElementById("adminBtnMobile").querySelector("span").textContent = t.admin;
-
       document.getElementById("emergencyAlert").textContent = t.alert;
       document.getElementById("consultingTitle").textContent = t.consulting;
-      document.getElementById("nowDoctor").innerHTML = `${t.doctor} <strong>Dr. A Yugandhar Reddy</strong>`;
-      document.getElementById("nowPatient").textContent = t.patient + " —";
       document.getElementById("nextLabel").textContent = t.next;
       document.getElementById("trackButton").textContent = t.track;
+
+      // 🔁 Update doctor name instantly
+      fetchOPData();
     }
 
     const savedLang = localStorage.getItem("userLang") || "te";
     langSelect.value = savedLang;
     switchLanguage(savedLang);
     langSelect.addEventListener("change", (e) => switchLanguage(e.target.value));
-
-    // 🧠 Fetch OP Data
-    async function fetchOPData() {
-      try {
-        const res = await fetch(`${API_URL}/api/getOPs`);
-        const ops = await res.json();
-        if (ops.length > 0) {
-          const current = ops[ops.length - 1];
-          const next = ops.length > 1 ? ops[ops.length - 2] : null;
-          const lang = localStorage.getItem("userLang") || "te";
-          const doctorName = current.doctorName || "Dr. A Yugandhar Reddy";
-
-          if (lang === "te") {
-            document.getElementById("nowDoctor").textContent = `డాక్టర్: ${doctorName}`;
-            document.getElementById("nowPatient").textContent = `రోగి: ${current.patientName} (ఓపి నం: ${current.opNumber})`;
-          } else {
-            document.getElementById("nowDoctor").textContent = `Doctor: ${doctorName}`;
-            document.getElementById("nowPatient").textContent = `Patient: ${current.patientName} (OP No: ${current.opNumber})`;
-          }
-
-          document.getElementById("nextPatient").textContent = next
-            ? `${next.patientName} (${lang === "te" ? "ఓపి నం" : "OP No"}: ${next.opNumber})`
-            : "—";
-        }
-      } catch (err) {
-        console.error("Error fetching OP data:", err);
-      }
-    }
 
     fetchOPData();
   </script>
