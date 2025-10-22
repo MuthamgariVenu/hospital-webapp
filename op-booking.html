@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>OP Booking | Ashwini Neuro Super Speciality Center</title>
-  <!-- <link rel="stylesheet" href="assets/styles.css" /> -->
+
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -16,7 +16,7 @@
       margin: 50px auto;
       background: #fff;
       border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
       padding: 25px;
     }
     h2 {
@@ -87,16 +87,21 @@
     const bookBtn = document.getElementById('bookBtn');
     const msgBox = document.getElementById('messageBox');
 
+    // 🧩 Auto-detect backend: local or live
+    const backendURL = window.location.hostname === "localhost"
+      ? "http://localhost:5000/api/book-op"
+      : "https://hospital-server-p4gy.onrender.com/api/book-op";
+
     bookBtn.addEventListener('click', async () => {
       const name = document.getElementById('name').value.trim();
       const number = document.getElementById('number').value.trim();
       const age = document.getElementById('age').value.trim();
 
-      // simple validation
       if (!name || !number || !age) {
         showMessage('Please fill all fields.', 'error');
         return;
       }
+
       if (!/^[0-9]{10}$/.test(number)) {
         showMessage('Enter a valid 10-digit mobile number.', 'error');
         return;
@@ -106,10 +111,10 @@
       showMessage('Booking in progress…', 'success');
 
       try {
-        const response = await fetch('https://hospital-server-p4gy.onrender.com/api/book-op', {
+        const response = await fetch(backendURL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, number, age })
+          body: JSON.stringify({ name, number, age }),
         });
 
         const data = await response.json();
@@ -119,7 +124,7 @@
             `✅ Booking Successful!<br>
              OP Number: <b>${data.opNumber}</b><br>
              Doctor ETA: <b>${data.eta}</b><br>
-             <a href="track-op.html">Track your OP</a>`,
+             <a href="track-op.html" style="color:#0078d7;">Track your OP</a>`,
             'success'
           );
           document.getElementById('name').value = '';
@@ -129,7 +134,7 @@
           showMessage('Booking failed, please try again.', 'error');
         }
       } catch (err) {
-        console.error(err);
+        console.error('❌ Error:', err);
         showMessage('Server error, please try again later.', 'error');
       } finally {
         bookBtn.disabled = false;
