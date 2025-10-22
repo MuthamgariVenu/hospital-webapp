@@ -13,7 +13,7 @@
   <!-- ✅ Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- ✅ Your hospital logo as favicon -->
+  <!-- ✅ Favicon -->
   <link rel="icon" href="./assets/images/logo.png" type="image/png" />
 
   <style>
@@ -36,7 +36,6 @@
     <!-- 🏥 Logo + Title -->
     <div class="flex items-center justify-between md:justify-start space-x-2 w-full md:w-auto">
       <div class="flex items-center space-x-2">
-        <!-- ✅ Your logo added here -->
         <img src="./assets/images/logo.png" class="w-10 h-10 mr-2 rounded-full shadow-sm" alt="logo" />
         <h1 id="title" class="text-xl md:text-2xl font-bold text-gray-800">అశ్విని న్యూరో సెంటర్</h1>
       </div>
@@ -101,15 +100,19 @@
 
     <p class="text-gray-700" id="nextLabel">తదుపరి క్యూలో:</p>
     <p class="text-gray-900 font-medium" id="nextPatient">—</p>
-
-    <button id="trackButton" class="mt-6 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold shadow-md transition">
-      నా ఓపి స్థితిని ట్రాక్ చేయండి
-    </button>
   </section>
+
+  <!-- 🧭 Track OP Button -->
+  <a href="track-op.html"
+     id="trackButton"
+     class="mt-6 inline-block px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold shadow-md transition text-center">
+     నా ఓపి స్థితిని ట్రాక్ చేయండి
+  </a>
 
   <!-- 🌐 JS -->
   <script>
     const langSelect = document.getElementById("langSelect");
+    const trackBtn = document.getElementById("trackButton");
 
     const translations = {
       te: {
@@ -139,7 +142,9 @@
     };
 
     function switchLanguage(lang) {
+      localStorage.setItem("userLang", lang);
       const t = translations[lang];
+
       document.getElementById("title").textContent = t.title;
       document.querySelectorAll("#opBookingBtn span, #opBookingBtnMobile span").forEach(e => e.textContent = t.opBooking);
       document.querySelectorAll("#serviceBtn span, #serviceBtnMobile span").forEach(e => e.textContent = t.service);
@@ -149,11 +154,16 @@
       document.getElementById("nowDoctor").textContent = t.doctor + " —";
       document.getElementById("nowPatient").textContent = t.patient + " —";
       document.getElementById("nextLabel").textContent = t.next;
-      document.getElementById("trackButton").textContent = t.track;
+      trackBtn.textContent = t.track;
     }
 
+    // Apply saved language or default Telugu
+    const savedLang = localStorage.getItem("userLang") || "te";
+    langSelect.value = savedLang;
+    switchLanguage(savedLang);
+
+    // Listen for language change
     langSelect.addEventListener("change", (e) => switchLanguage(e.target.value));
-    switchLanguage("te");
 
     // 🧠 Backend Logic
     const API_URL = "https://hospital-server-p4gy.onrender.com";
@@ -164,10 +174,16 @@
         if (ops.length > 0) {
           const current = ops[ops.length - 1];
           const next = ops.length > 1 ? ops[ops.length - 2] : null;
-          document.getElementById("nowDoctor").textContent = `డాక్టర్: ${current.doctorName}`;
-          document.getElementById("nowPatient").textContent = `రోగి: ${current.patientName} (ఓపి నం: ${current.opNumber})`;
+          const lang = localStorage.getItem("userLang") || "te";
+          if (lang === "te") {
+            document.getElementById("nowDoctor").textContent = `డాక్టర్: ${current.doctorName}`;
+            document.getElementById("nowPatient").textContent = `రోగి: ${current.patientName} (ఓపి నం: ${current.opNumber})`;
+          } else {
+            document.getElementById("nowDoctor").textContent = `Doctor: ${current.doctorName}`;
+            document.getElementById("nowPatient").textContent = `Patient: ${current.patientName} (OP No: ${current.opNumber})`;
+          }
           document.getElementById("nextPatient").textContent = next
-            ? `${next.patientName} (ఓపి నం: ${next.opNumber})`
+            ? `${next.patientName} (${lang === "te" ? "ఓపి నం" : "OP No"}: ${next.opNumber})`
             : "—";
         }
       } catch (err) {
