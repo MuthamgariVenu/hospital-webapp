@@ -1,142 +1,49 @@
 <!DOCTYPE html>
-<html lang="te">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Dashboard | Ashwini Neuro Center</title>
-
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin Login | Ashwini Neuro</title>
   <link rel="icon" href="./assets/images/logo.png" type="image/png" />
-
-  <style>
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .fade-in { animation: fadeIn 0.4s ease-out; }
-  </style>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
+<body class="bg-[#f5f8fa] min-h-screen flex items-center justify-center font-sans">
 
-<body class="bg-gray-50 min-h-screen flex flex-col items-center">
-
-  <!-- 🌟 Header -->
-  <header class="w-full bg-white shadow p-4 flex items-center justify-between relative">
-    <div class="flex items-center space-x-2">
-      <img src="./assets/images/logo.png" class="w-10 h-10 rounded-full shadow-sm" alt="logo" />
-      <h1 id="title" class="text-xl md:text-2xl font-bold text-gray-800">అశ్విని న్యూరో సెంటర్</h1>
+  <div class="bg-white p-8 rounded-2xl shadow-lg w-full max-w-sm text-center">
+    <!-- Logo and Title -->
+    <div class="mb-6">
+      <img src="./assets/images/logo.png" alt="Hospital Logo" class="w-16 mx-auto mb-2" onerror="this.style.display='none'">
+      <h1 class="text-2xl font-extrabold text-gray-800">Ashwini Neuro Admin Portal</h1>
     </div>
 
-    <div class="flex items-center space-x-4">
-      <!-- 🌐 Language Dropdown -->
-      <div>
-        <span class="text-gray-600 font-medium mr-1">Ln</span>
-        <select id="langSelect" class="border border-gray-300 rounded-md px-2 py-1 text-sm focus:outline-none">
-          <option value="te" selected>తెలుగు</option>
-          <option value="en">English</option>
-        </select>
+    <!-- Login Form -->
+    <form id="loginForm" class="space-y-4">
+      <div class="text-left">
+        <label for="username" class="block text-sm font-medium text-gray-700 mb-1">Username</label>
+        <input id="username" name="username" type="text" placeholder="Enter username"
+               class="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+               value="admin">
       </div>
 
-      <!-- 🔙 Back Button -->
-      <button onclick="goBack()" class="bg-blue-50 hover:bg-blue-100 p-2 rounded-full transition">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-        </svg>
+      <div class="text-left">
+        <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+        <input id="password" name="password" type="password" placeholder="Enter password"
+               class="w-full border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+               value="admin123">
+      </div>
+
+      <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-md hover:bg-blue-700 transition-all">
+        Login
       </button>
-    </div>
-  </header>
+    </form>
 
-  <!-- 🩺 Admin Content -->
-  <section class="bg-white shadow-md rounded-2xl p-8 mt-10 w-11/12 md:w-3/4 text-center fade-in">
-    <h2 id="todayOPTitle" class="text-xl font-semibold text-gray-800 mb-4">ఈ రోజు మొత్తం ఓపీలు</h2>
-    <p id="todayCount" class="text-5xl font-bold text-blue-600 mb-4">0</p>
+    <p id="msg" class="text-sm text-red-600 mt-3 hidden"></p>
 
-    <div class="overflow-x-auto mt-6">
-      <table class="min-w-full bg-white border border-gray-200 rounded-xl">
-        <thead class="bg-blue-50">
-          <tr>
-            <th class="py-3 px-4 text-left text-sm font-semibold text-gray-600" id="thOp">ఓపి నంబర్</th>
-            <th class="py-3 px-4 text-left text-sm font-semibold text-gray-600" id="thPatient">రోగి పేరు</th>
-            <th class="py-3 px-4 text-left text-sm font-semibold text-gray-600" id="thDoctor">డాక్టర్</th>
-          </tr>
-        </thead>
-        <tbody id="opTable" class="text-sm text-gray-700"></tbody>
-      </table>
-    </div>
-  </section>
+    <p class="text-xs text-gray-500 mt-6">© 2025 Ashwini Hospital | Admin Access Only</p>
+  </div>
 
-  <script>
-    const API_URL = "https://hospital-server-p4gy.onrender.com";
-    const langSelect = document.getElementById("langSelect");
-    const todayCountEl = document.getElementById("todayCount");
-    const opTable = document.getElementById("opTable");
+  <!-- External JS -->
+  <script src="./assets/js/admin.js"></script>
 
-    const translations = {
-      te: {
-        title: "అశ్విని న్యూరో సెంటర్",
-        todayOP: "ఈ రోజు మొత్తం ఓపీలు",
-        thOp: "ఓపి నంబర్",
-        thPatient: "రోగి పేరు",
-        thDoctor: "డాక్టర్"
-      },
-      en: {
-        title: "Ashwini Neuro Center",
-        todayOP: "Today's OP Count",
-        thOp: "OP Number",
-        thPatient: "Patient Name",
-        thDoctor: "Doctor"
-      }
-    };
-
-    function goBack() { window.history.back(); }
-
-    function switchLanguage(lang) {
-      localStorage.setItem("userLang", lang);
-      const t = translations[lang];
-      document.getElementById("title").textContent = t.title;
-      document.getElementById("todayOPTitle").textContent = t.todayOP;
-      document.getElementById("thOp").textContent = t.thOp;
-      document.getElementById("thPatient").textContent = t.thPatient;
-      document.getElementById("thDoctor").textContent = t.thDoctor;
-    }
-
-    const savedLang = localStorage.getItem("userLang") || "te";
-    langSelect.value = savedLang;
-    switchLanguage(savedLang);
-    langSelect.addEventListener("change", (e) => switchLanguage(e.target.value));
-
-    // 🧮 Fetch today's OPs
-    async function fetchTodayOPs() {
-      try {
-        const res = await fetch(`${API_URL}/api/getOPs`);
-        const ops = await res.json();
-        const today = new Date().toISOString().split("T")[0];
-
-        // Filter today’s entries
-        const todaysOPs = ops.filter(op => op.createdAt && op.createdAt.startsWith(today));
-        todayCountEl.textContent = todaysOPs.length;
-
-        opTable.innerHTML = "";
-        if (todaysOPs.length === 0) {
-          opTable.innerHTML = `<tr><td colspan="3" class="text-center py-4 text-gray-500">No OP entries today</td></tr>`;
-          return;
-        }
-
-        todaysOPs.forEach(op => {
-          const row = `
-            <tr class="border-t">
-              <td class="py-2 px-4 font-semibold text-blue-600">${op.opNumber}</td>
-              <td class="py-2 px-4">${op.patientName}</td>
-              <td class="py-2 px-4">${op.doctorName}</td>
-            </tr>
-          `;
-          opTable.innerHTML += row;
-        });
-      } catch (err) {
-        console.error("Error fetching OP data:", err);
-      }
-    }
-
-    fetchTodayOPs();
-  </script>
 </body>
 </html>
