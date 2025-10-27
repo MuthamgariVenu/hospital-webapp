@@ -72,10 +72,12 @@
       <img src="https://cdn-icons-png.flaticon.com/512/599/599502.png" class="w-5 h-5" />
       <span>సేవ</span>
     </a>
-    <a href="admin.html" id="adminBtnMobile" class="flex items-center space-x-1 bg-white px-4 py-2 rounded-lg hover:bg-blue-100 transition">
-      <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" class="w-5 h-5" />
-      <span>అడ్మిన్</span>
-    </a>
+<a href="admin-login.html" 
+   class="flex items-center space-x-1 bg-blue-50 px-4 py-2 rounded-lg hover:bg-blue-100 transition">
+  <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" class="w-5 h-5" />
+  <span>Admin</span>
+</a>
+
   </nav>
 
   <!-- 🚨 Emergency Alert -->
@@ -111,41 +113,51 @@
 
   <!-- 🌐 JS -->
   <script>
-const API_URL = "https://hospital-server-p4gy.onrender.com";
+//const API_URL = "https://hospital-server-p4gy.onrender.com";
+const API_URL = "http://localhost:5000";
 
-    const translations = {
-      te: {
-        title: "అశ్విని న్యూరో సెంటర్",
-        consulting: "ప్రస్తుతం కన్సల్టింగ్",
-        doctorLabel: "వైద్యుడు:",
-        patientLabel: "రోగి:",
-        nextLabel: "తదుపరి క్యూలో:",
-        total: "మొత్తం రోగులు:",
-        track: "నా ఓపి స్థితిని ట్రాక్ చేయండి"
-      },
-      en: {
-        title: "Ashwini Neuro Center",
-        consulting: "Now Consulting",
-        doctorLabel: "Doctor:",
-        patientLabel: "Patient:",
-        nextLabel: "Next in Queue:",
-        total: "Total Patients:",
-        track: "Track My OP Status"
-      }
-    };
 
-    // ✅ Helper to translate English text → Telugu
-    async function translateToTelugu(text) {
-      if (!text || text === "—") return text;
-      try {
-        const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=en|te`);
-        const data = await res.json();
-        return data.responseData.translatedText || text;
-      } catch (e) {
-        console.error("Translation error:", e);
-        return text;
-      }
-    }
+const translations = {
+  te: {
+    title: "అశ్విని న్యూరో సెంటర్",
+    consulting: "ప్రస్తుతం కన్సల్టింగ్",
+    doctorLabel: "వైద్యుడు:",
+    patientLabel: "రోగి:",
+    nextLabel: "తదుపరి క్యూలో:",
+    total: "మొత్తం రోగులు:",
+    track: "నా ఓపి స్థితిని ట్రాక్ చేయండి",
+    alert: "🚨 అత్యవసర కేసు: ఓపి లేకుండా నేరుగా కన్సల్టెంట్ వద్ద – డా. సురేష్ కుమార్, గది నం. 3",
+    opBooking: "ఓపి బుకింగ్",
+    service: "సేవ",
+    admin: "అడ్మిన్"
+  },
+  en: {
+    title: "Ashwini Neuro Center",
+    consulting: "Now Consulting",
+    doctorLabel: "Doctor:",
+    patientLabel: "Patient:",
+    nextLabel: "Next in Queue:",
+    total: "Total Patients:",
+    track: "Track My OP Status",
+    alert: "🚨 Emergency Cases: Direct consulting without OP – Dr. Suresh Kumar, Room No. 3",
+    opBooking: "OP Booking",
+    service: "Service",
+    admin: "Admin"
+  }
+};
+
+    // // ✅ Helper to translate English text → Telugu
+    // async function translateToTelugu(text) {
+    //   if (!text || text === "—") return text;
+    //   try {
+    //     const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=en|te`);
+    //     const data = await res.json();
+    //     return data.responseData.translatedText || text;
+    //   } catch (e) {
+    //     console.error("Translation error:", e);
+    //     return text;
+    //   }
+    // }
 
     function handleEmergencyClick() {
       window.location.href = "emergency.html";
@@ -171,11 +183,14 @@ const API_URL = "https://hospital-server-p4gy.onrender.com";
         let patientName = consulting?.patientName || "—";
         let nextPatientName = next?.patientName || "—";
 
-        if (lang === "te") {
-          doctorName = await translateToTelugu(doctorName);
-          patientName = await translateToTelugu(patientName);
-          nextPatientName = await translateToTelugu(nextPatientName);
-        }
+        // ⚡ Telugu text labels only (no translation delay)
+if (lang === "te") {
+  // Keep names as-is, just labels will appear in Telugu
+  doctorName = doctorName || "—";
+  patientName = patientName || "—";
+  nextPatientName = nextPatientName || "—";
+}
+
 
         document.getElementById("title").textContent = t.title;
         document.getElementById("consultingTitle").textContent = t.consulting;
@@ -201,10 +216,26 @@ const API_URL = "https://hospital-server-p4gy.onrender.com";
     langSelect.value = savedLang;
 
     langSelect.addEventListener("change", e => {
-      const lang = e.target.value;
-      localStorage.setItem("userLang", lang);
-      fetchConsultingData();
-    });
-  </script>
+  const lang = e.target.value;
+  localStorage.setItem("userLang", lang);
+
+  // 🔥 Instantly update all static text without refresh
+  const t = translations[lang];
+
+  document.getElementById("title").textContent = t.title;
+  document.getElementById("consultingTitle").textContent = t.consulting;
+  document.getElementById("nextLabel").textContent = t.nextLabel;
+  document.getElementById("trackButton").textContent = t.track;
+  document.getElementById("emergencyAlert").textContent = t.alert;
+
+  document.querySelectorAll("#opBookingBtn span, #opBookingBtnMobile span").forEach(el => el.textContent = t.opBooking);
+  document.querySelectorAll("#serviceBtn span, #serviceBtnMobile span").forEach(el => el.textContent = t.service);
+  document.querySelectorAll("#adminBtn span").forEach(el => el.textContent = t.admin);
+
+  // ✅ Then update live data (doctor, patient, etc.)
+  fetchConsultingData();
+});
+
+    </script>
 </body>
 </html>

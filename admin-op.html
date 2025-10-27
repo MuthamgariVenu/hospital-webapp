@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OP Booking Details | Ashwini Neuro Center</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" href="./assets/images/logo.png" type="image/png" />
+
+  <style>
+    body {
+      background: linear-gradient(135deg, #e0f2fe, #f8fafc);
+      font-family: "Poppins", sans-serif;
+      min-height: 100vh;
+    }
+
+    .card {
+      background: white;
+      border-radius: 1rem;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+    }
+
+    .slide-down {
+      animation: slideDown 0.3s ease-out;
+    }
+
+    @keyframes slideDown {
+      0% {
+        opacity: 0;
+        transform: translateY(-5px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+
+<body class="p-4 md:p-10">
+  <div class="max-w-6xl mx-auto bg-white rounded-3xl shadow-xl p-6 md:p-10">
+    <!-- Header -->
+     
+<!-- Header Section -->
+<div class="flex justify-between items-start md:items-center mb-6 relative">
+  <h1 class="text-2xl md:text-3xl font-bold text-gray-800">OP Booking Details</h1>
+
+  <!-- Date + Time Section -->
+  <div class="text-gray-600 text-right pr-10"> <!-- Added padding-right -->
+    <p id="currentDate" class="font-medium"></p>
+    <p id="currentTime" class="text-sm"></p>
+  </div>
+
+  <!-- ❌ Close Button (Top Right Corner, No Overflow) -->
+  <button
+    onclick="window.location.href='admin.html'"
+    class="absolute -top-4 right-1 md:-top-5 md:right-2 w-8 h-8 flex items-center justify-center 
+           rounded-full bg-gray-100 text-gray-600 hover:bg-blue-100 hover:text-blue-600 
+           text-3xl font-bold leading-none transform hover:scale-110 transition shadow-sm"
+    title="Close & Back">
+    &times;
+  </button>
+</div>
+
+
+    <!-- Table for large screens -->
+    <div class="hidden md:block">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="bg-blue-100 text-gray-700">
+            <th class="p-3 text-left">OP No</th>
+            <th class="p-3 text-left">Patient Name</th>
+            <th class="p-3 text-left">Time</th>
+            <th class="p-3 text-center">Status</th>
+          </tr>
+        </thead>
+        <tbody id="opTable"></tbody>
+      </table>
+    </div>
+
+    <!-- Cards for mobile view -->
+    <div id="opCards" class="md:hidden space-y-4"></div>
+  </div>
+
+  <!-- JS -->
+  <script src="./admin-op.js"></script>
+</body>
+</html>
