@@ -150,13 +150,15 @@
         const data = await response.json();
 
         if (data.success) {
+          
           showMessage(
-            `✅ Booking Successful!<br>
-             OP Number: <b>${data.opNumber}</b><br>
-             Doctor ETA: <b>${data.eta}</b><br>
-             <a href="track-op.html" style="color:#0078d7;">Track your OP</a>`,
-            'success'
-          );
+  `✅ Booking Successful!<br>
+   OP Number: <b>${data.opNumber}</b><br>
+   Doctor ETA: <b>${data.eta}</b><br>
+   <a href="track-op.html" style="color:#0078d7;">Track your OP</a>`,
+  'success'
+);
+
           document.getElementById('name').value = '';
           document.getElementById('number').value = '';
           document.getElementById('age').value = '';

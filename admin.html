@@ -18,24 +18,34 @@
       border-radius: 1rem;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
       transition: transform 0.2s, box-shadow 0.2s;
+      padding: 1.5rem;
     }
     .card:hover {
       transform: translateY(-3px);
       box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
     }
+
+    /* 📱 Responsive adjustments */
+    @media (max-width: 768px) {
+      body {
+        padding: 0.5rem;
+      }
+      .card {
+        padding: 1rem !important;
+      }
+    }
   </style>
 </head>
 
-<body class="flex justify-center items-center p-6">
-  <div class="w-full max-w-4xl bg-white rounded-3xl shadow-xl p-6 md:p-10 relative">
+<body class="flex justify-center items-center p-4 sm:p-6">
+  <div class="w-full max-w-none bg-white rounded-3xl shadow-xl p-4 sm:p-6 md:p-10 relative">
 
     <!-- Header -->
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 relative">
       <div class="flex items-center space-x-3">
-  <img src="./assets/images/logo.png" alt="Ashwini Neuro Logo" class="w-10 h-10 rounded-full shadow-sm" />
-  <h1 class="text-2xl md:text-3xl font-bold text-gray-800">Admin Dashboard</h1>
-</div>
-
+        <img src="./assets/images/logo.png" alt="Ashwini Neuro Logo" class="w-10 h-10 rounded-full shadow-sm" />
+        <h1 class="text-2xl md:text-3xl font-bold text-gray-800">Admin Dashboard</h1>
+      </div>
 
       <!-- Date, Time & Logout -->
       <div class="flex flex-col items-end text-right text-gray-600 space-y-1 pr-10">
@@ -56,20 +66,20 @@
     </div>
 
     <!-- Dashboard Stats -->
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-      <div class="card flex flex-col items-center justify-center p-6 text-center">
+    <div class="grid grid-cols-3 gap-4 mb-8">
+      <div class="card flex flex-col items-center justify-center text-center">
         <img src="https://cdn-icons-png.flaticon.com/512/387/387561.png" class="w-10 h-10 mb-2" alt="Total OPs">
         <h3 class="text-gray-800 font-semibold">Total OPs</h3>
         <p id="totalOPs" class="text-blue-600 text-2xl font-bold mt-1">--</p>
       </div>
 
-      <div class="card flex flex-col items-center justify-center p-6 text-center">
+      <div class="card flex flex-col items-center justify-center text-center">
         <img src="https://cdn-icons-png.flaticon.com/512/2921/2921222.png" class="w-10 h-10 mb-2" alt="Reports">
         <h3 class="text-gray-800 font-semibold">Reports</h3>
         <p id="reportCount" class="text-blue-600 text-2xl font-bold mt-1">--</p>
       </div>
 
-      <div class="card flex flex-col items-center justify-center p-6 text-center">
+      <div class="card flex flex-col items-center justify-center text-center">
         <img src="https://cdn-icons-png.flaticon.com/512/190/190411.png" class="w-10 h-10 mb-2" alt="Completed">
         <h3 class="text-gray-800 font-semibold">Completed</h3>
         <p id="completedCount" class="text-green-600 text-2xl font-bold mt-1">--</p>
@@ -77,23 +87,23 @@
     </div>
 
     <!-- Navigation Cards -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <button onclick="navigateTo('admin-op.html')" class="card flex flex-col items-center justify-center p-6 text-center">
+    <div class="grid grid-cols-2 gap-4">
+      <button onclick="navigateTo('admin-op.html')" class="card flex flex-col items-center justify-center text-center">
         <img src="https://cdn-icons-png.flaticon.com/512/4320/4320371.png" class="w-10 h-10 mb-2" alt="OP Booking">
         <h3 class="text-gray-800 font-semibold">OP Booking Details</h3>
       </button>
 
-      <button onclick="navigateTo('admin-report.html')" class="card flex flex-col items-center justify-center p-6 text-center">
+      <button onclick="navigateTo('admin-report.html')" class="card flex flex-col items-center justify-center text-center">
         <img src="https://cdn-icons-png.flaticon.com/512/2921/2921222.png" class="w-10 h-10 mb-2" alt="Report Details">
         <h3 class="text-gray-800 font-semibold">Report Details</h3>
       </button>
 
-      <div class="card flex flex-col items-center justify-center p-6 text-center opacity-75">
+      <div class="card flex flex-col items-center justify-center text-center opacity-75">
         <img src="https://cdn-icons-png.flaticon.com/512/1046/1046784.png" class="w-10 h-10 mb-2" alt="Medicines">
         <h3 class="text-gray-800 font-semibold">Medicines Details</h3>
       </div>
 
-      <div class="card flex flex-col items-center justify-center p-6 text-center opacity-75">
+      <div class="card flex flex-col items-center justify-center text-center opacity-75">
         <img src="https://cdn-icons-png.flaticon.com/512/4320/4320374.png" class="w-10 h-10 mb-2" alt="Staff Details">
         <h3 class="text-gray-800 font-semibold">Staff Details</h3>
       </div>
@@ -124,35 +134,31 @@
     function navigateTo(page) {
       window.location.href = page;
     }
-// 🏥 Fetch Total OP Count from backend
-async function fetchTotalOPs() {
-  try {
-    // ✅ Correct backend endpoint
-    const response = await fetch("http://localhost:5000/api/admin/dashboard-counts");
-    const data = await response.json();
 
-    document.getElementById("totalOPs").textContent = data.totalCount ?? "--";
-    document.getElementById("reportCount").textContent = data.reportCount ?? "--";
-    document.getElementById("completedCount").textContent = data.completedCount ?? "--";
-  } catch (error) {
-    console.error("Error fetching OP count:", error);
-    document.getElementById("totalOPs").textContent = "--";
-    document.getElementById("reportCount").textContent = "--";
-    document.getElementById("completedCount").textContent = "--";
-  }
-}
+    // 🏥 Fetch Total OP Count from backend
+    async function fetchTotalOPs() {
+      try {
+        const response = await fetch("http://localhost:5000/api/admin/dashboard-counts");
+        const data = await response.json();
 
-// Run on page load
-fetchTotalOPs();
+        document.getElementById("totalOPs").textContent = data.totalCount ?? "--";
+        document.getElementById("reportCount").textContent = data.reportCount ?? "--";
+        document.getElementById("completedCount").textContent = data.completedCount ?? "--";
+      } catch (error) {
+        console.error("Error fetching OP count:", error);
+        document.getElementById("totalOPs").textContent = "--";
+        document.getElementById("reportCount").textContent = "--";
+        document.getElementById("completedCount").textContent = "--";
+      }
+    }
 
-// Call function when dashboard loads
-fetchTotalOPs();
+    fetchTotalOPs();
 
     // 🔐 Logout Functionality
     document.getElementById("logoutBtn").addEventListener("click", () => {
       localStorage.removeItem("adminLoggedIn");
       sessionStorage.clear();
-      window.location.href = "admin-login.html"; // redirect to login page
+      window.location.href = "admin-login.html";
     });
   </script>
 </body>
