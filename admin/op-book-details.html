@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ashwini Neuro Admin Panel</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-50 font-sans">
+
+  <!-- 🔹 Navbar -->
+  <nav class="bg-white shadow-sm px-4 py-3 flex justify-between items-center">
+    <div class="flex items-center gap-2">
+      <img src="./assets/images/logo.png" alt="Logo" class="w-8 h-8 rounded-full" />
+      <h1 class="text-gray-700 font-semibold text-base sm:text-lg">Ashwini Neuro Admin Panel</h1>
+    </div>
+    <div class="flex items-center gap-4 text-sm text-gray-600">
+      <span>Dashboard</span>
+      <span class="text-gray-400">|</span>
+      <span id="todayDate" class="font-medium text-blue-600"></span>
+      <span class="text-gray-500">Admin</span>
+      <button id="logoutBtn" class="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600">Logout</button>
+    </div>
+  </nav>
+
+  <!-- 🔹 Dashboard Counts -->
+  <section class="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4">
+    <div class="bg-white shadow rounded-lg p-4 flex justify-between items-center">
+      <div>
+        <p class="text-sm text-gray-600">Today's OP Count</p>
+        <h2 id="opCount" class="text-2xl font-bold text-gray-800">0</h2>
+      </div>
+      <div class="bg-blue-500 text-white p-2 rounded-md">📅</div>
+    </div>
+
+    <div class="bg-white shadow rounded-lg p-4 flex justify-between items-center">
+      <div>
+        <p class="text-sm text-gray-600">Report Count</p>
+        <h2 id="reportCount" class="text-2xl font-bold text-gray-800">0</h2>
+      </div>
+      <div class="bg-yellow-500 text-white p-2 rounded-md">🧪</div>
+    </div>
+
+    <div class="bg-white shadow rounded-lg p-4 flex justify-between items-center">
+      <div>
+        <p class="text-sm text-gray-600">Completed Count</p>
+        <h2 id="completedCount" class="text-2xl font-bold text-gray-800">0</h2>
+      </div>
+      <div class="bg-green-500 text-white p-2 rounded-md">✅</div>
+    </div>
+  </section>
+
+  <!-- 🔹 OP Booking Details -->
+  <section class="p-4">
+    <h2 class="text-lg font-semibold text-gray-700 mb-3">OP Booking Details</h2>
+    <div class="overflow-x-auto bg-white rounded-lg shadow">
+      <table class="w-full border-collapse text-sm">
+        <thead class="bg-gray-100 text-gray-600">
+          <tr>
+            <th class="p-2 text-left">S.No</th>
+            <th class="p-2 text-left">Patient Name</th>
+            <th class="p-2 text-left">Time</th>
+            <th class="p-2 text-left">Date</th>
+            <th class="p-2 text-center">Action</th>
+          </tr>
+        </thead>
+        <tbody id="opTableBody">
+          <tr>
+            <td colspan="5" class="text-center p-3 text-gray-400">Loading...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+
+  <script src="admin/op-book-details.js"></script>
+
+</body>
+</html>

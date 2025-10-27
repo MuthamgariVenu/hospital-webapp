@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reports | Ashwini Neuro</title>
+
+  <!-- ✅ Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 min-h-screen font-sans">
+
+  <!-- Header -->
+  <header class="bg-white shadow-md flex justify-between items-center px-6 py-3">
+    <h1 class="text-2xl font-semibold text-blue-600">Reports Section</h1>
+    <button onclick="location.href='dashboard.html'"
+      class="bg-green-500 hover:bg-green-600 text-white font-semibold px-5 py-2 rounded-lg shadow-md">
+      ← Back to Dashboard
+    </button>
+    <div id="currentDateTime" class="text-gray-700 text-sm"></div>
+  </header>
+
+  <main class="flex flex-col justify-center items-center mt-20">
+    <h2 class="text-2xl font-semibold text-gray-700 mb-3">Reports Coming Soon</h2>
+    <p class="text-gray-500">This section will display analytics and reports in future updates.</p>
+  </main>
+
+  <script>
+    function updateTime() {
+      const now = new Date();
+      document.getElementById("currentDateTime").innerText = now.toLocaleString();
+    }
+    setInterval(updateTime, 1000);
+    updateTime();
+  </script>
+</body>
+</html>
