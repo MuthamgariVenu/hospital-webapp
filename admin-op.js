@@ -23,18 +23,17 @@ async function fetchOPData() {
     const res = await fetch(`${API_URL}/api/admin/op-bookings`);
     const data = await res.json();
     renderTable(data);
-    renderCards(data);
   } catch (err) {
     console.error("❌ Fetch Error:", err);
   }
 }
 
-// 🧾 Render Table for Desktop/Tab
+// 🧾 Render Table (Responsive for all screens)
 function renderTable(data) {
   const tbody = document.getElementById("opTable");
   tbody.innerHTML = "";
 
-  data.forEach((item) => {
+  data.forEach((item, index) => {
     const tr = document.createElement("tr");
     tr.classList.add("border-b", "hover:bg-blue-50");
 
@@ -53,46 +52,13 @@ function renderTable(data) {
     }
 
     tr.innerHTML = `
+      <td class="p-3">${index + 1}</td>
       <td class="p-3">${item.opNumber}</td>
       <td class="p-3">${item.patientName}</td>
-      <td class="p-3">${item.time}</td>
       <td class="p-3 text-center">${statusContent}</td>
     `;
 
     tbody.appendChild(tr);
-  });
-}
-
-// 📱 Render Mobile Cards
-function renderCards(data) {
-  const container = document.getElementById("opCards");
-  container.innerHTML = "";
-
-  data.forEach((item) => {
-    const card = document.createElement("div");
-    card.className = "card p-4";
-
-    let statusContent = "";
-    const status = item.status || "Pending";
-
-    if (status === "Doctor") {
-      statusContent = `<button class="bg-blue-600 text-white px-3 py-1 rounded-md font-medium animate-glow" onclick="toggleOptions('${item._id}', this)">Doctor</button>`;
-    } else if (status === "Report") {
-      statusContent = `<button class="bg-yellow-500 text-white px-3 py-1 rounded-md font-medium animate-glow" onclick="toggleOptions('${item._id}', this)">Reports</button>`;
-    } else if (status === "Completed") {
-      statusContent = `<span class="bg-green-600 text-white px-3 py-1 rounded-md font-medium">Completed</span>`;
-    } else {
-      statusContent = `<button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition" onclick="toggleOptions('${item._id}', this)">View</button>`;
-    }
-
-    card.innerHTML = `
-      <p><span class="font-semibold text-gray-700">OP No:</span> ${item.opNumber}</p>
-      <p><span class="font-semibold text-gray-700">Patient:</span> ${item.patientName}</p>
-      <p><span class="font-semibold text-gray-700">Time:</span> ${item.time}</p>
-      <div class="mt-2 text-center">${statusContent}</div>
-    `;
-
-    container.appendChild(card);
   });
 }
 

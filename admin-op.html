@@ -9,9 +9,11 @@
 
     <style>
       body {
-        background: linear-gradient(135deg, #e0f2fe, #f8fafc);
+        background-color: #f8fafc;
         font-family: "Poppins", sans-serif;
         min-height: 100vh;
+        margin: 0;
+        padding: 0;
       }
 
       .card {
@@ -36,7 +38,36 @@
         }
       }
 
-      /* ✅ Make full width and auto-scale for small screens */
+      /* 🔹 Header Section Styling */
+      .header-section {
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+      }
+
+      /* 🔹 Close button top-right */
+      .close-btn {
+        position: absolute;
+        top: -15px;
+        right: -10px;
+        background-color: #f3f4f6;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: background-color 0.2s ease-in-out;
+        z-index: 10;
+      }
+
+      .close-btn:hover {
+        background-color: #e5e7eb;
+      }
+
       @media (max-width: 768px) {
         body {
           padding: 0.5rem;
@@ -54,48 +85,41 @@
           padding: 0.5rem;
         }
         h1 {
-          font-size: 1.4rem;
+          font-size: 1.3rem;
         }
       }
     </style>
   </head>
 
-  <body class="p-4 md:p-10">
+  <body class="p-2 md:p-6">
     <div
-      class="main-container max-w-6xl mx-auto bg-white rounded-3xl shadow-xl p-6 md:p-10"
+      class="main-container max-w-6xl mx-auto bg-white rounded-3xl shadow-xl p-6 md:p-8"
     >
-      <!-- Header -->
-      <div class="flex justify-between items-start md:items-center mb-6 relative">
-        <h1 class="text-2xl md:text-3xl font-bold text-gray-800">
-          OP Booking Details
-        </h1>
-
-        <!-- Date + Time -->
-        <div class="text-gray-600 text-right pr-10">
-          <p id="currentDate" class="font-medium"></p>
-          <p id="currentTime" class="text-sm"></p>
+      <!-- Header Section -->
+      <div class="header-section">
+        <!-- Title & Logo -->
+        <div class="flex items-center space-x-3">
+          <img src="./assets/images/logo.png" alt="Logo" class="w-10 h-10" />
+          <h1 class="text-2xl md:text-3xl font-bold text-gray-800">
+            OP Booking Details
+          </h1>
         </div>
 
-        <!-- ❌ Close Button -->
-        <button
-          onclick="window.location.href='admin.html'"
-          class="absolute -top-4 right-1 md:-top-5 md:right-2 w-8 h-8 flex items-center justify-center 
-           rounded-full bg-gray-100 text-gray-600 hover:bg-blue-100 hover:text-blue-600 
-           text-3xl font-bold leading-none transform hover:scale-110 transition shadow-sm"
-          title="Close & Back"
-        >
-          &times;
-        </button>
+        <!-- Date & Time -->
+        <div id="currentDateTime" class="text-gray-700 text-sm md:text-base font-medium"></div>
+
+        <!-- Close Button -->
+        <div class="close-btn" onclick="window.location.href='admin.html'">✕</div>
       </div>
 
-      <!-- Single Table for all screens -->
+      <!-- Table -->
       <div class="overflow-x-auto">
         <table class="w-full border-collapse">
           <thead>
             <tr class="bg-blue-100 text-gray-700">
+              <th class="p-3 text-left">S.No</th>
               <th class="p-3 text-left">OP No</th>
               <th class="p-3 text-left">Patient Name</th>
-              <th class="p-3 text-left">Time</th>
               <th class="p-3 text-center">Status</th>
             </tr>
           </thead>
@@ -104,6 +128,99 @@
       </div>
     </div>
 
-    <script src="./admin-op.js"></script>
+    <script>
+      const API_URL = "https://hospital-server-p4gy.onrender.com";
+
+      function updateDateTime() {
+        const now = new Date();
+        const formatted = now.toLocaleString("en-GB", {
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: true,
+        });
+        document.getElementById("currentDateTime").textContent = formatted.replace(",", "");
+      }
+      setInterval(updateDateTime, 1000);
+      updateDateTime();
+
+      async function fetchOPData() {
+        try {
+          const res = await fetch(`${API_URL}/api/admin/op-bookings`);
+          const data = await res.json();
+          renderTable(data);
+        } catch (err) {
+          console.error("❌ Fetch Error:", err);
+        }
+      }
+
+      function renderTable(data) {
+        const tbody = document.getElementById("opTable");
+        tbody.innerHTML = "";
+
+        data.forEach((item, index) => {
+          const tr = document.createElement("tr");
+          tr.classList.add("border-b", "hover:bg-blue-50");
+
+          let statusContent = "";
+          const status = item.status || "Pending";
+
+          if (status === "Doctor") {
+            statusContent = `<button class="bg-blue-600 text-white px-3 py-1 rounded-md font-medium animate-glow" onclick="toggleOptions('${item._id}', this)">Doctor</button>`;
+          } else if (status === "Report") {
+            statusContent = `<button class="bg-yellow-500 text-white px-3 py-1 rounded-md font-medium animate-glow" onclick="toggleOptions('${item._id}', this)">Reports</button>`;
+          } else if (status === "Completed") {
+            statusContent = `<span class="bg-green-600 text-white px-3 py-1 rounded-md font-medium">Completed</span>`;
+          } else {
+            statusContent = `<button class="bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition" onclick="toggleOptions('${item._id}', this)">View</button>`;
+          }
+
+          tr.innerHTML = `
+            <td class="p-3">${index + 1}</td>
+            <td class="p-3">${item.opNumber}</td>
+            <td class="p-3">${item.patientName}</td>
+            <td class="p-3 text-center">${statusContent}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+
+      function toggleOptions(id, btn) {
+        const existing = document.querySelector(".expand-row");
+        if (existing) existing.remove();
+        if (btn.textContent.trim() === "Completed") return;
+
+        const parentRow = btn.closest("tr");
+        const expandRow = document.createElement("tr");
+        expandRow.className = "expand-row slide-down bg-gray-50";
+
+        expandRow.innerHTML = `
+          <td colspan="4" class="p-4 text-center space-x-2">
+            <button onclick="updateStatus('${id}', 'Doctor')" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">Doctor</button>
+            <button onclick="updateStatus('${id}', 'Report')" class="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600">Reports</button>
+            <button onclick="updateStatus('${id}', 'Completed')" class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700">Completed</button>
+          </td>
+        `;
+        parentRow.insertAdjacentElement("afterend", expandRow);
+      }
+
+      async function updateStatus(id, status) {
+        try {
+          const res = await fetch(`${API_URL}/api/admin/update-status/${id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ status }),
+          });
+          if (res.ok) fetchOPData();
+        } catch (err) {
+          console.error("❌ Error:", err);
+        }
+      }
+
+      setInterval(fetchOPData, 10000);
+      fetchOPData();
+    </script>
   </body>
 </html>
