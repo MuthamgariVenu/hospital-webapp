@@ -12,19 +12,29 @@
 </head>
 
 <body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen">
+
   <!-- ✅ HEADER -->
   <header class="bg-white shadow-md flex flex-col md:flex-row items-center justify-between py-4 px-6">
+    <!-- Left: Logo + Name -->
     <div class="flex items-center space-x-2">
       <img src="assets/images/logo.png" alt="Ashwini Neuro Center Logo" class="h-10 w-auto">
       <h1 class="text-2xl font-semibold text-blue-700">Ashwini Neuro Center</h1>
     </div>
 
+    <!-- Right: Language + Back Arrow -->
     <div class="flex items-center space-x-4 mt-2 md:mt-0">
       <!-- Language Dropdown -->
       <select id="languageSelect" class="border border-gray-300 rounded-md px-3 py-1 text-sm focus:outline-none">
         <option value="en">English</option>
         <option value="te">తెలుగు</option>
       </select>
+
+      <!-- Back Arrow -->
+      <a href="index.html" 
+         class="flex items-center justify-center bg-blue-600 text-white w-9 h-9 rounded-full hover:bg-blue-700 transition"
+         title="Back to Home">
+        ←
+      </a>
     </div>
   </header>
 
@@ -33,7 +43,6 @@
 
     <!-- English Content -->
     <div id="english-content">
-      <!-- Image Section -->
       <div class="flex flex-col md:flex-row items-center gap-6 mb-8">
         <img src="assets/images/brainclot.png" alt="Brain Stroke Awareness" class="rounded-xl shadow-lg w-full md:w-1/2 object-cover">
         <img src="assets/images/nerve.png" alt="Nervous System after Stroke" class="rounded-xl shadow-lg w-full md:w-1/2 object-cover">
@@ -97,7 +106,6 @@
 
     <!-- Telugu Content -->
     <div id="telugu-content" class="telugu hidden">
-      <!-- Images -->
       <div class="flex flex-col md:flex-row items-center gap-6 mb-8">
         <img src="assets/images/brainclot.png" alt="Brain Stroke Awareness" class="rounded-xl shadow-lg w-full md:w-1/2 object-cover">
         <img src="assets/images/nerve.png" alt="Nervous System after Stroke" class="rounded-xl shadow-lg w-full md:w-1/2 object-cover">
@@ -136,9 +144,9 @@
         క్లోట్ తొలగింపు (థ్రాంబొలైసిస్), మరియు అనుభవజ్ఞులైన న్యూరాలజిస్టులు అందుబాటులో ఉంటారు.
       </p>
 
-      <!-- Neurology Problems Telugu -->
       <h2 class="text-2xl font-bold text-gray-900 mb-4">🧠 న్యూరో సంబంధిత సమస్యలు</h2>
       <ul class="list-disc ml-6 space-y-1">
+        <li>ప్రకాశవాతం (Stroke)</li>
         <li>ఫిట్స్ (Epilepsy)</li>
         <li>తలనొప్పి (Headache)</li>
         <li>మెడనొప్పి (Neck Pain)</li>
