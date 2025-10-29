@@ -7,7 +7,6 @@
 
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- ✅ Updated logo -->
   <link rel="icon" href="./assets/images/logo.png" type="image/png" />
 
   <style>
@@ -154,13 +153,26 @@
       resultCard.classList.remove("hidden");
     }
 
+    // ✅ Updated showDetails() — ignores completed & reports (case-insensitive)
     function showDetails(data, currentOp) {
+      const activeData = data.filter(op => {
+        const s = (op.status || "").toLowerCase();
+        return s !== "completed" && s !== "report" && s !== "reports";
+      });
+
       resultCard.classList.add("hidden");
       detailsCard.classList.remove("hidden");
 
-      const current = data.find(op => op.opNumber === currentOp);
-      const ahead = data.filter(op => op.queueNumber < current.queueNumber);
-      const consulting = data.find(op => op.status === "In Consultation");
+      const current = activeData.find(op => op.opNumber === currentOp);
+      if (!current) {
+        alert(lang === "te" ? "ఈ ఓపి పూర్తయింది లేదా రిపోర్ట్‌లో ఉంది." : "This OP is completed or in reports.");
+        resultCard.classList.remove("hidden");
+        detailsCard.classList.add("hidden");
+        return;
+      }
+
+      const ahead = activeData.filter(op => op.queueNumber < current.queueNumber);
+      const consulting = activeData.find(op => op.status === "In Consultation");
 
       doctorName.textContent = `${lang === "te" ? "వైద్యుడు" : "Doctor"}: ${current.doctorName}`;
       queueNumber.textContent = `${lang === "te" ? "మీ క్యూలో స్థానం" : "Your Queue Number"}: ${current.queueNumber}`;
@@ -178,27 +190,30 @@
       });
     }
 
+    // ✅ Updated fetchOpStatus() — ignores completed & reports (case-insensitive)
     async function fetchOpStatus(opNumber) {
       try {
         const res = await fetch(`${API_URL}/api/getOPs`);
         let data = await res.json();
 
-        // ✅ Ensure queue numbers are sequential
+        data = data.filter(op => {
+          const s = (op.status || "").toLowerCase();
+          return s !== "completed" && s !== "report" && s !== "reports";
+        });
+
         data = data.map((op, index) => ({
           ...op,
           queueNumber: op.queueNumber || index + 1,
         }));
-
-        // Sort data safely
         data.sort((a, b) => a.queueNumber - b.queueNumber);
 
         const current = data.find(op => op.opNumber === opNumber);
         if (!current) {
-          alert(lang === "te" ? "తప్పు ఓపి నంబర్ ఇచ్చారు." : "Invalid OP number.");
+          alert(lang === "te" ? "తప్పు ఓపి నంబర్ లేదా రిపోర్ట్/పూర్తయింది." : "Invalid OP number or already completed/report case.");
           return;
         }
 
-        const patientsAhead = Math.max(0, current.queueNumber - 1);
+        const patientsAhead = data.filter(op => op.queueNumber < current.queueNumber).length;
         const expectedTime = new Date();
         expectedTime.setMinutes(expectedTime.getMinutes() + (patientsAhead * 10));
 
@@ -209,7 +224,8 @@
         formCard.classList.add("hidden");
         resultCard.classList.remove("hidden");
         moreBtn.onclick = () => showDetails(data, opNumber);
-      } catch {
+      } catch (err) {
+        console.error(err);
         alert(lang === "te" ? "సర్వర్ లోపం జరిగింది." : "Server error. Please try again.");
       }
     }
