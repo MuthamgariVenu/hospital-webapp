@@ -38,7 +38,6 @@
         }
       }
 
-      /* 🔹 Header Section Styling */
       .header-section {
         position: relative;
         display: flex;
@@ -47,7 +46,6 @@
         margin-bottom: 1rem;
       }
 
-      /* 🔹 Close button top-right */
       .close-btn {
         position: absolute;
         top: -15px;
@@ -141,7 +139,8 @@
           minute: "2-digit",
           hour12: true,
         });
-        document.getElementById("currentDateTime").textContent = formatted.replace(",", "");
+        document.getElementById("currentDateTime").textContent =
+          formatted.replace(",", "");
       }
       setInterval(updateDateTime, 1000);
       updateDateTime();
@@ -149,7 +148,11 @@
       async function fetchOPData() {
         try {
           const res = await fetch(`${API_URL}/api/admin/op-bookings`);
-          const data = await res.json();
+          let data = await res.json();
+
+          // ✅ Sort in FIFO (oldest first → new last)
+          data.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+
           renderTable(data);
         } catch (err) {
           console.error("❌ Fetch Error:", err);
@@ -178,7 +181,7 @@
           }
 
           tr.innerHTML = `
-            <td class="p-3">${index + 1}</td>
+            <td class="p-3 font-semibold">${index + 1}</td>
             <td class="p-3">${item.opNumber}</td>
             <td class="p-3">${item.patientName}</td>
             <td class="p-3 text-center">${statusContent}</td>
@@ -219,6 +222,7 @@
         }
       }
 
+      // Auto refresh every 10 seconds
       setInterval(fetchOPData, 10000);
       fetchOPData();
     </script>

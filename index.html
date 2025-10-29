@@ -11,6 +11,7 @@
   <meta http-equiv="Expires" content="0" />
 
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script> <!-- ✅ added -->
   <link rel="icon" href="./assets/images/logo.png" type="image/png" />
 
   <style>
@@ -21,6 +22,26 @@
     .scroll-text {
       display:inline-block; white-space:nowrap;
       animation: ticker 25s linear infinite;
+    }
+
+    /* 🟢 Live indicator styling */
+    #liveIndicator {
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    #liveDot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+      background-color: gray;
+      animation: pulse 1.2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
     }
   </style>
 </head>
@@ -43,6 +64,12 @@
           <option value="en">English</option>
         </select>
       </div>
+    </div>
+
+    <!-- 🟢 Live Sync Indicator -->
+    <div id="liveIndicator" class="absolute top-2 right-4 text-gray-700 font-medium">
+      <span id="liveDot"></span>
+      <span id="liveText">Connecting...</span>
     </div>
 
     <!-- 🧭 Desktop Buttons -->
@@ -72,12 +99,10 @@
       <img src="https://cdn-icons-png.flaticon.com/512/599/599502.png" class="w-5 h-5" />
       <span>సేవ</span>
     </a>
-<a href="admin-login.html" 
-   class="flex items-center space-x-1 bg-blue-50 px-4 py-2 rounded-lg hover:bg-blue-100 transition">
-  <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" class="w-5 h-5" />
-  <span>Admin</span>
-</a>
-
+    <a href="admin-login.html" class="flex items-center space-x-1 bg-blue-50 px-4 py-2 rounded-lg hover:bg-blue-100 transition">
+      <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" class="w-5 h-5" />
+      <span>Admin</span>
+    </a>
   </nav>
 
   <!-- 🚨 Emergency Alert -->
@@ -113,9 +138,27 @@
 
   <!-- 🌐 JS -->
   <script>
-//const API_URL = "https://hospital-server-p4gy.onrender.com";
-const API_URL = "http://localhost:5000";
+const API_URL = "http://localhost:5000"; // 🔹 adjust for deployment
 
+const socket = io(API_URL); // ✅ Connect to backend socket
+const liveDot = document.getElementById("liveDot");
+const liveText = document.getElementById("liveText");
+
+socket.on("connect", () => {
+  liveDot.style.backgroundColor = "limegreen";
+  liveText.textContent = "Live Sync Active";
+});
+
+socket.on("disconnect", () => {
+  liveDot.style.backgroundColor = "red";
+  liveText.textContent = "Disconnected";
+});
+
+// 🟢 When queue updates on backend
+socket.on("queueUpdated", () => {
+  console.log("♻️ Queue updated — refreshing data...");
+  fetchConsultingData(); // 🔁 instantly refresh data
+});
 
 const translations = {
   te: {
@@ -146,80 +189,54 @@ const translations = {
   }
 };
 
-    // // ✅ Helper to translate English text → Telugu
-    // async function translateToTelugu(text) {
-    //   if (!text || text === "—") return text;
-    //   try {
-    //     const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=en|te`);
-    //     const data = await res.json();
-    //     return data.responseData.translatedText || text;
-    //   } catch (e) {
-    //     console.error("Translation error:", e);
-    //     return text;
-    //   }
-    // }
-
-    function handleEmergencyClick() {
-      window.location.href = "emergency.html";
-    }
-
-    // ✅ Fetch + Auto Translate if Telugu selected
-    async function fetchConsultingData() {
-      try {
-        const [consultingRes, nextRes, allRes] = await Promise.all([
-          fetch(`${API_URL}/api/current-consulting`),
-          fetch(`${API_URL}/api/next-in-queue`),
-          fetch(`${API_URL}/api/getOPs`)
-        ]);
-
-        const consulting = await consultingRes.json();
-        const next = await nextRes.json();
-        const all = await allRes.json();
-
-        const lang = localStorage.getItem("userLang") || "te";
-        const t = translations[lang];
-
-        let doctorName = consulting?.doctorName || "—";
-        let patientName = consulting?.patientName || "—";
-        let nextPatientName = next?.patientName || "—";
-
-        // ⚡ Telugu text labels only (no translation delay)
-if (lang === "te") {
-  // Keep names as-is, just labels will appear in Telugu
-  doctorName = doctorName || "—";
-  patientName = patientName || "—";
-  nextPatientName = nextPatientName || "—";
+function handleEmergencyClick() {
+  window.location.href = "emergency.html";
 }
 
+async function fetchConsultingData() {
+  try {
+    const [consultingRes, nextRes, allRes] = await Promise.all([
+      fetch(`${API_URL}/api/current-consulting`),
+      fetch(`${API_URL}/api/next-in-queue`),
+      fetch(`${API_URL}/api/getOPs`)
+    ]);
 
-        document.getElementById("title").textContent = t.title;
-        document.getElementById("consultingTitle").textContent = t.consulting;
-        document.getElementById("nextLabel").textContent = t.nextLabel;
-        document.getElementById("trackButton").textContent = t.track;
+    const consulting = await consultingRes.json();
+    const next = await nextRes.json();
+    const all = await allRes.json();
 
-        document.getElementById("nowDoctor").textContent = `${t.doctorLabel} ${doctorName}`;
-        document.getElementById("nowPatient").textContent = `${t.patientLabel} ${patientName}`;
-        document.getElementById("nextPatient").textContent = nextPatientName;
-        document.getElementById("totalPatients").textContent = `${t.total} ${all.length}`;
-      } catch (err) {
-        console.error("Queue Fetch Error:", err);
-      }
-    }
+    const lang = localStorage.getItem("userLang") || "te";
+    const t = translations[lang];
 
-    // 🔁 Refresh every 5 seconds
-    setInterval(fetchConsultingData, 5000);
-    fetchConsultingData();
+    let doctorName = consulting?.doctorName || "—";
+    let patientName = consulting?.patientName || "—";
+    let nextPatientName = next?.patientName || "—";
 
-    // 🌐 Language Switch
-    const langSelect = document.getElementById("langSelect");
-    const savedLang = localStorage.getItem("userLang") || "te";
-    langSelect.value = savedLang;
+    document.getElementById("title").textContent = t.title;
+    document.getElementById("consultingTitle").textContent = t.consulting;
+    document.getElementById("nextLabel").textContent = t.nextLabel;
+    document.getElementById("trackButton").textContent = t.track;
+    document.getElementById("nowDoctor").textContent = `${t.doctorLabel} ${doctorName}`;
+    document.getElementById("nowPatient").textContent = `${t.patientLabel} ${patientName}`;
+    document.getElementById("nextPatient").textContent = nextPatientName;
+    document.getElementById("totalPatients").textContent = `${t.total} ${all.length}`;
+  } catch (err) {
+    console.error("Queue Fetch Error:", err);
+  }
+}
 
-    langSelect.addEventListener("change", e => {
+// 🔁 Still keep interval as fallback (every 30s)
+setInterval(fetchConsultingData, 30000);
+fetchConsultingData();
+
+// 🌐 Language Switch
+const langSelect = document.getElementById("langSelect");
+const savedLang = localStorage.getItem("userLang") || "te";
+langSelect.value = savedLang;
+
+langSelect.addEventListener("change", e => {
   const lang = e.target.value;
   localStorage.setItem("userLang", lang);
-
-  // 🔥 Instantly update all static text without refresh
   const t = translations[lang];
 
   document.getElementById("title").textContent = t.title;
@@ -232,10 +249,8 @@ if (lang === "te") {
   document.querySelectorAll("#serviceBtn span, #serviceBtnMobile span").forEach(el => el.textContent = t.service);
   document.querySelectorAll("#adminBtn span").forEach(el => el.textContent = t.admin);
 
-  // ✅ Then update live data (doctor, patient, etc.)
   fetchConsultingData();
 });
-
-    </script>
+  </script>
 </body>
 </html>

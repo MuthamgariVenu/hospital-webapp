@@ -159,7 +159,7 @@
     // 📊 Fetch Dashboard Counts
     async function fetchTotalOPs() {
       try {
-        const response = await fetch("https://hospital-server.onrender.com/api/admin/dashboard-counts");
+        const response = await fetch("http://localhost:5000/api/admin/dashboard-counts");
         const data = await response.json();
         document.getElementById("totalOPs").textContent = data.totalCount ?? "--";
         document.getElementById("reportCount").textContent = data.reportCount ?? "--";
