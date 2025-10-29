@@ -15,6 +15,7 @@
       margin: 0;
       padding: 0;
     }
+
     .card {
       background: white;
       border-radius: 1rem;
@@ -22,10 +23,12 @@
       transition: transform 0.2s, box-shadow 0.2s;
       padding: 1.5rem;
     }
+
     .card:hover {
       transform: translateY(-3px);
       box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
     }
+
     .logout-btn {
       position: absolute;
       top: 1rem;
@@ -81,21 +84,21 @@
       </div>
     </div>
 
-    <!-- Dashboard Stats -->
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-      <div class="card flex flex-col items-center justify-center text-center bg-blue-50">
+    <!-- ✅ Dashboard Stats (Fixed layout for mobile) -->
+    <div class="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-3 gap-3 mb-8 place-items-center">
+      <div class="card flex flex-col items-center justify-center text-center bg-blue-50 w-28 sm:w-32 md:w-40 h-32 sm:h-36 md:h-40">
         <img src="https://cdn-icons-png.flaticon.com/512/387/387561.png" class="w-10 h-10 mb-2" alt="Total OPs">
         <h3 class="text-gray-800 font-semibold">Total OPs</h3>
         <p id="totalOPs" class="text-blue-600 text-2xl font-bold mt-1">--</p>
       </div>
 
-      <div class="card flex flex-col items-center justify-center text-center bg-yellow-50">
+      <div class="card flex flex-col items-center justify-center text-center bg-yellow-50 w-28 sm:w-32 md:w-40 h-32 sm:h-36 md:h-40">
         <img src="https://cdn-icons-png.flaticon.com/512/2921/2921222.png" class="w-10 h-10 mb-2" alt="Reports">
         <h3 class="text-gray-800 font-semibold">Reports</h3>
         <p id="reportCount" class="text-yellow-600 text-2xl font-bold mt-1">--</p>
       </div>
 
-      <div class="card flex flex-col items-center justify-center text-center bg-green-50">
+      <div class="card flex flex-col items-center justify-center text-center bg-green-50 w-28 sm:w-32 md:w-40 h-32 sm:h-36 md:h-40">
         <img src="https://cdn-icons-png.flaticon.com/512/190/190411.png" class="w-10 h-10 mb-2" alt="Completed">
         <h3 class="text-gray-800 font-semibold">Completed</h3>
         <p id="completedCount" class="text-green-600 text-2xl font-bold mt-1">--</p>
