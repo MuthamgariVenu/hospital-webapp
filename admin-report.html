@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Report Details | Ashwini Hospital</title>
+  <link rel="icon" type="image/png" href="assets/images/logo.png" />
+
+  <style>
+    body {
+      font-family: "Poppins", sans-serif;
+      background: #f6f8ff;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    header img {
+      width: 65px;
+    }
+    header h2 {
+      color: #007bff;
+      font-size: 22px;
+      margin: 0;
+      flex-grow: 1;
+      text-align: center;
+    }
+    #datetime {
+      font-size: 14px;
+      color: #555;
+    }
+
+    .container {
+      max-width: 950px;
+      margin: 25px auto;
+      background: #fff;
+      border-radius: 15px;
+      padding: 25px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    }
+
+    .cards {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      margin-bottom: 25px;
+    }
+    .card {
+      flex: 1;
+      text-align: center;
+      background: #eef5ff;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.05);
+    }
+    .card h3 {
+      color: #007bff;
+      margin: 0;
+      font-size: 20px;
+    }
+    .card p {
+      font-size: 20px;
+      font-weight: bold;
+      margin-top: 8px;
+      color: #333;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background: #e7f0ff;
+      color: #333;
+    }
+    td button {
+      border: none;
+      background: #007bff;
+      color: white;
+      padding: 6px 15px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    td button:hover {
+      background: #0056b3;
+    }
+
+    /* Popup Modal */
+    .popup {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.4);
+      display: flex; justify-content: center; align-items: center;
+      z-index: 9999;
+    }
+    .popup-content {
+      background: #fff;
+      padding: 25px;
+      border-radius: 10px;
+      text-align: center;
+      width: 320px;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+    .action-btns {
+      display: flex;
+      justify-content: space-around;
+      margin: 20px 0;
+    }
+    .btn-paid {
+      background: #ffc107;
+      border: none;
+      padding: 8px 20px;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .btn-ready {
+      background: #28a745;
+      border: none;
+      padding: 8px 20px;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .close-btn {
+      background: #dc3545;
+      color: #fff;
+      border: none;
+      padding: 6px 15px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @media (max-width: 768px) {
+      .cards { flex-direction: column; align-items: center; }
+      .card { width: 80%; }
+      header h2 { font-size: 18px; }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <img src="assets/images/logo.png" alt="Ashwini Logo" />
+    <h2>Report Details</h2>
+    <div id="datetime"></div>
+  </header>
+
+  <div class="container">
+    <div class="cards">
+      <div class="card">
+        <h3>Reports</h3>
+        <p id="reportCount">0</p>
+      </div>
+      <div class="card">
+        <h3>Completed</h3>
+        <p id="completedCount">0</p>
+      </div>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>S.No</th>
+          <th>OP No</th>
+          <th>Name</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="reportTableBody">
+        <tr><td colspan="4" style="text-align:center;color:gray;">Loading...</td></tr>
+      </tbody>
+    </table>
+  </div>
+<script>
+  // ✅ Live Date/Time
+  function updateDateTime() {
+    const now = new Date();
+    const formatted = now.toLocaleString("en-IN", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: true,
+    });
+    document.getElementById("datetime").textContent = formatted;
+  }
+  setInterval(updateDateTime, 1000);
+  updateDateTime();
+</script>
+
+<script>
+  const API_BASE = "http://localhost:5000/api/reports";
+
+  // ✅ Load Reports
+  async function loadReports() {
+    try {
+      const response = await fetch(`${API_BASE}/list`);
+      const data = await response.json();
+      const reports = data.reports || [];
+
+      // Update count cards
+      const totalReports = reports.length;
+      const completed = reports.filter((r) => r.status === "Completed").length;
+
+      document.getElementById("reportCount").innerText = totalReports;
+      document.getElementById("completedCount").innerText = completed;
+
+      // Populate table
+      const tableBody = document.getElementById("reportTableBody");
+      tableBody.innerHTML = "";
+
+      if (reports.length === 0) {
+        tableBody.innerHTML = `<tr><td colspan="4" style="text-align:center;color:gray;">No Reports Found</td></tr>`;
+        return;
+      }
+
+      reports.forEach((item, index) => {
+        // if status is null or empty -> show "View"
+        const currentStatus = item.status && item.status.trim() !== "" ? item.status : "View";
+        const color = getStatusColor(currentStatus);
+        const isDisabled = currentStatus === "Completed" ? "disabled" : "";
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${index + 1}</td>
+          <td>${item.opNumber || item.opNo}</td>
+          <td>${item.patientName}</td>
+          <td>
+            <button
+              style="background:${color};color:white;border:none;padding:6px 15px;border-radius:6px;cursor:pointer;"
+              ${isDisabled}
+              onclick="openActions('${item.opNumber}','${item.patientName}','${item.patientNumber}','${currentStatus}', this)">
+              ${currentStatus}
+            </button>
+          </td>
+        `;
+        tableBody.appendChild(tr);
+      });
+    } catch (err) {
+      console.error("❌ Fetch Error:", err);
+    }
+  }
+
+  // ✅ Status color logic
+  function getStatusColor(status) {
+    switch (status) {
+      case "Paid": return "#ffc107"; // yellow
+      case "Ready": return "#28a745"; // green
+      case "Completed": return "#20c997"; // teal-green
+      case "View": return "#007bff"; // blue
+      default: return "#007bff";
+    }
+  }
+
+  // ✅ Open Popup (for Paid / Ready / Completed)
+  function openActions(opNo, name, mobile, status, btnRef) {
+    // If already completed → skip edit
+    if (status === "Completed") return;
+
+    const modal = document.createElement("div");
+    modal.classList.add("popup");
+    modal.innerHTML = `
+      <div class="popup-content">
+        <h3>${name}</h3>
+        <p><b>OP No:</b> ${opNo}</p>
+        <p><b>Mobile:</b> ${mobile}</p>
+        <p><b>Current Status:</b> <span style="color:${getStatusColor(status)}">${status}</span></p>
+
+        <div class="action-btns">
+          <button class="btn-paid" onclick="updateStatus('${opNo}','${name}','${mobile}','Paid', this)">Paid</button>
+          <button class="btn-ready" onclick="updateStatus('${opNo}','${name}','${mobile}','Ready', this)">Ready</button>
+          <button style="background:#20c997;border:none;padding:8px 20px;color:white;border-radius:6px;cursor:pointer;"
+            onclick="updateStatus('${opNo}','${name}','${mobile}','Completed', this)">Completed</button>
+        </div>
+
+        <button class="close-btn" onclick="document.querySelector('.popup').remove()">Close</button>
+      </div>
+    `;
+    document.body.appendChild(modal);
+  }
+
+  // ✅ Update Status (with SMS and instant color update)
+  async function updateStatus(opNo, name, mobile, status, btn) {
+    try {
+      const res = await fetch(`${API_BASE}/updateStatus`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ opNo, name, mobile, status }),
+      });
+
+      const result = await res.json();
+      if (result.success) {
+        // Update button directly (without hiding data)
+        const allButtons = document.querySelectorAll("table button");
+        allButtons.forEach((b) => {
+          const opText = b.parentElement.previousElementSibling.previousElementSibling?.textContent;
+          if (opText === opNo) {
+            b.textContent = status;
+            b.style.background = getStatusColor(status);
+            if (status === "Completed") b.disabled = true;
+          }
+        });
+
+        // Show feedback
+        const popup = btn.closest(".popup-content");
+        popup.innerHTML = `
+          <h3>${name}</h3>
+          <p><b>OP No:</b> ${opNo}</p>
+          <p style="color:${getStatusColor(status)};font-weight:bold;">✅ Updated to ${status}</p>
+          <button class="btn-ready" onclick="document.querySelector('.popup').remove()">OK</button>
+        `;
+
+        loadReports(); // update counters
+
+        if (status === "Ready") {
+          alert("✅ Report Ready! SMS sent to patient.");
+        }
+      } else {
+        alert("❌ Failed to update status.");
+      }
+    } catch (err) {
+      console.error("❌ Update Error:", err);
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", loadReports);
+</script>
+
+  </body>
+</html>
