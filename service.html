@@ -11,169 +11,196 @@
   </style>
 </head>
 
-<body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen">
+<body class="bg-white text-gray-800 flex flex-col min-h-screen">
 
   <!-- ✅ HEADER -->
-  <header class="bg-white shadow-md flex flex-col md:flex-row items-center justify-between py-4 px-6">
-    <!-- Left: Logo + Name -->
-    <div class="flex items-center space-x-2">
-      <img src="assets/images/logo.png" alt="Ashwini Neuro Center Logo" class="h-10 w-auto">
-      <h1 class="text-2xl font-semibold text-blue-700">Ashwini Neuro Center</h1>
+  <header class="relative bg-white shadow-md py-4 px-6 flex items-center justify-center">
+    <!-- Center: Logo + Name -->
+    <div class="flex flex-col items-center text-center">
+      <img src="assets/images/logo.png" alt="Ashwini Neuro Center Logo" class="h-12 w-auto mb-1">
+      <h1 class="text-2xl font-bold text-blue-700">Ashwini Neuro Center</h1>
     </div>
 
-    <!-- Right: Language + Back Arrow -->
-    <div class="flex items-center space-x-4 mt-2 md:mt-0">
-      <!-- Language Dropdown -->
+    <!-- Top Right: Language + Back -->
+    <div class="absolute top-4 right-4 flex items-center space-x-3">
       <select id="languageSelect" class="border border-gray-300 rounded-md px-3 py-1 text-sm focus:outline-none">
         <option value="en">English</option>
         <option value="te">తెలుగు</option>
       </select>
-
-      <!-- Back Arrow -->
-      <a href="index.html" 
+      <a href="index.html"
          class="flex items-center justify-center bg-blue-600 text-white w-9 h-9 rounded-full hover:bg-blue-700 transition"
-         title="Back to Home">
-        ←
-      </a>
+         title="Back to Home">←</a>
     </div>
   </header>
 
   <!-- ✅ MAIN CONTENT -->
-  <main class="max-w-5xl mx-auto p-6 mt-6 flex-grow">
+  <main class="max-w-6xl mx-auto p-6 mt-8 flex-grow">
 
-    <!-- English Content -->
-    <div id="english-content">
-      <div class="flex flex-col md:flex-row items-center gap-6 mb-8">
-        <img src="assets/images/brainclot.png" alt="Brain Stroke Awareness" class="rounded-xl shadow-lg w-full md:w-1/2 object-cover">
-        <img src="assets/images/nerve.png" alt="Nervous System after Stroke" class="rounded-xl shadow-lg w-full md:w-1/2 object-cover">
+    <!-- English Section -->
+    <div id="english-content" class="space-y-10">
+
+      <!-- 🧠 Section 1 -->
+      <div class="flex flex-col md:flex-row items-center bg-white shadow-md rounded-2xl overflow-hidden">
+        <div class="md:w-1/2">
+          <img src="assets/images/brainclot.png" alt="Brain Stroke Awareness" class="w-full h-full object-cover">
+        </div>
+        <div class="md:w-1/2 p-8">
+          <h2 class="text-3xl font-bold text-blue-700 mb-3">Brain Stroke Awareness</h2>
+          <p class="text-lg text-gray-700 leading-relaxed mb-4">
+            A brain stroke occurs when the blood supply to part of your brain is interrupted or reduced, 
+            preventing brain tissue from getting oxygen and nutrients. Early treatment is crucial to 
+            minimize brain damage and complications.
+          </p>
+        </div>
       </div>
 
-      <h2 class="text-3xl font-bold text-gray-900 mb-4">Brain Stroke Awareness</h2>
-      <p class="text-lg leading-relaxed mb-4">
-        A brain stroke occurs when the blood supply to part of your brain is interrupted or reduced, 
-        preventing brain tissue from getting oxygen and nutrients. Early treatment is crucial to 
-        minimize brain damage and complications.
-      </p>
+      <!-- 🧩 Section 2 -->
+      <div class="flex flex-col md:flex-row items-center bg-white shadow-md rounded-2xl overflow-hidden">
+        <div class="md:w-1/2">
+          <img src="assets/images/nerve.png" alt="Stroke Symptoms" class="w-full h-full object-cover">
+        </div>
+        <div class="md:w-1/2 p-8">
+          <h3 class="text-2xl font-semibold text-blue-700 mb-2">Symptoms</h3>
+          <ul class="list-disc ml-6 text-gray-700 space-y-1">
+            <li>Sudden weakness or numbness on one side of the body</li>
+            <li>Difficulty in speaking or understanding speech</li>
+            <li>Sudden vision problems in one or both eyes</li>
+            <li>Loss of balance or coordination</li>
+            <li>Severe headache with no known cause</li>
+          </ul>
+        </div>
+      </div>
 
-      <h3 class="text-xl font-semibold text-blue-700 mt-6 mb-2">Symptoms</h3>
-      <ul class="list-disc ml-6 mb-4">
-        <li>Sudden weakness or numbness on one side of the body</li>
-        <li>Difficulty in speaking or understanding speech</li>
-        <li>Sudden vision problems in one or both eyes</li>
-        <li>Loss of balance or coordination</li>
-        <li>Severe headache with no known cause</li>
-      </ul>
+      <!-- ⏱️ Section 3 -->
+      <div class="flex flex-col md:flex-row items-center bg-white shadow-md rounded-2xl overflow-hidden">
+        <div class="md:w-1/2">
+          <img src="assets/images/strokehelp.png" alt="Emergency Handling" class="w-full h-full object-cover">
+        </div>
+        <div class="md:w-1/2 p-8">
+          <h3 class="text-2xl font-semibold text-blue-700 mb-2">Emergency Handling</h3>
+          <p class="text-lg mb-4">
+            If you notice stroke symptoms, act <strong>FAST</strong> — 
+            <strong>Face drooping, Arm weakness, Speech difficulty, Time to hospital.</strong> 
+            Rush to the nearest stroke care center immediately.
+          </p>
+          <h3 class="text-2xl font-semibold text-blue-700 mb-2">Golden Time (Window Period)</h3>
+          <p class="text-lg mb-4">
+            Treatment is most effective if the patient reaches the hospital 
+            <strong>within 4.5 hours</strong> of symptom onset. Every minute counts.
+          </p>
+        </div>
+      </div>
 
-      <h3 class="text-xl font-semibold text-blue-700 mt-6 mb-2">Emergency Handling</h3>
-      <p class="text-lg mb-4">
-        If you notice stroke symptoms, act <strong>FAST</strong> — 
-        <strong>Face drooping, Arm weakness, Speech difficulty, Time to hospital.</strong> 
-        Rush to the nearest stroke care center immediately.
-      </p>
-
-      <h3 class="text-xl font-semibold text-blue-700 mt-6 mb-2">Golden Time (Window Period)</h3>
-      <p class="text-lg mb-4">
-        Treatment is most effective if the patient reaches the hospital 
-        <strong>within 4.5 hours</strong> of symptom onset. Every minute counts — 
-        timely treatment can save brain cells and improve recovery.
-      </p>
-
-      <h3 class="text-xl font-semibold text-blue-700 mt-6 mb-2">Treatment at Ashwini Neuro Center</h3>
-      <p class="text-lg mb-8">
-        Our hospital provides 24/7 stroke emergency services, advanced neuroimaging, 
-        clot removal (thrombolysis), and expert neurologists available round the clock.
-      </p>
-
-      <!-- Neurology Related Problems -->
-      <h2 class="text-2xl font-bold text-gray-900 mb-4">🧠 Neurology-Related Problems</h2>
-      <ul class="list-disc ml-6 space-y-1">
-        <li>Stroke</li>
-        <li>Epilepsy</li>
-        <li>Headache</li>
-        <li>Neck Pain</li>
-        <li>Back Pain</li>
-        <li>Numbness</li>
-        <li>Paralysis</li>
-        <li>Memory Loss</li>
-        <li>Difficulty in Walking</li>
-        <li>Pain in Hands and Legs</li>
-        <li>Forgetfulness</li>
-        <li>Nerve Problems</li>
-        <li>Sleep Disorders</li>
-        <li>Giddiness / Vertigo</li>
-      </ul>
+      <!-- 🏥 Section 4 -->
+      <div class="flex flex-col md:flex-row items-center bg-white shadow-md rounded-2xl overflow-hidden">
+        <div class="md:w-1/2">
+          <img src="assets/images/hospital.png" alt="Treatment at Ashwini Neuro Center" class="w-full h-full object-cover">
+        </div>
+        <div class="md:w-1/2 p-8">
+          <h3 class="text-2xl font-semibold text-blue-700 mb-3">Treatment at Ashwini Neuro Center</h3>
+          <p class="text-lg mb-4">
+            Our hospital provides 24/7 stroke emergency services, advanced neuroimaging, 
+            clot removal (thrombolysis), and expert neurologists available round the clock.
+          </p>
+          <h3 class="text-2xl font-bold text-blue-700 mb-3">🧠 Neurology-Related Problems</h3>
+          <ul class="list-disc ml-6 text-gray-700 space-y-1">
+            <li>Stroke</li><li>Epilepsy</li><li>Headache</li><li>Neck Pain</li><li>Back Pain</li>
+            <li>Numbness</li><li>Paralysis</li><li>Memory Loss</li><li>Difficulty in Walking</li>
+            <li>Pain in Hands and Legs</li><li>Forgetfulness</li><li>Nerve Problems</li>
+            <li>Sleep Disorders</li><li>Giddiness / Vertigo</li>
+          </ul>
+        </div>
+      </div>
     </div>
 
-    <!-- Telugu Content -->
-    <div id="telugu-content" class="telugu hidden">
-      <div class="flex flex-col md:flex-row items-center gap-6 mb-8">
-        <img src="assets/images/brainclot.png" alt="Brain Stroke Awareness" class="rounded-xl shadow-lg w-full md:w-1/2 object-cover">
-        <img src="assets/images/nerve.png" alt="Nervous System after Stroke" class="rounded-xl shadow-lg w-full md:w-1/2 object-cover">
+    <!-- Telugu Section -->
+    <div id="telugu-content" class="telugu hidden space-y-10">
+
+      <!-- బ్రెయిన్ స్ట్రోక్ -->
+      <div class="flex flex-col md:flex-row items-center bg-white shadow-md rounded-2xl overflow-hidden">
+        <div class="md:w-1/2">
+          <img src="assets/images/brainclot.png" alt="Brain Stroke Telugu" class="w-full h-full object-cover">
+        </div>
+        <div class="md:w-1/2 p-8">
+          <h2 class="text-3xl font-bold text-blue-700 mb-3">బ్రెయిన్ స్ట్రోక్ సమాచారం</h2>
+          <p class="text-lg leading-relaxed mb-4">
+            మెదడుకు రక్తప్రసరణ తగ్గిపోతే లేదా ఆగిపోతే బ్రెయిన్ స్ట్రోక్ జరుగుతుంది.
+            సమయానికి చికిత్స చేయడం ద్వారా మెదడు కణాల నష్టం తగ్గించవచ్చు.
+          </p>
+        </div>
       </div>
 
-      <h2 class="text-3xl font-bold text-gray-900 mb-4">బ్రెయిన్ స్ట్రోక్ సమాచారం</h2>
-      <p class="text-lg leading-relaxed mb-4">
-        మెదడుకు రక్తప్రసరణ తగ్గిపోతే లేదా ఆగిపోతే బ్రెయిన్ స్ట్రోక్ జరుగుతుంది. 
-        సమయానికి చికిత్స చేయడం ద్వారా మెదడు కణాల నష్టం తగ్గించవచ్చు.
-      </p>
+      <!-- లక్షణాలు -->
+      <div class="flex flex-col md:flex-row items-center bg-white shadow-md rounded-2xl overflow-hidden">
+        <div class="md:w-1/2">
+          <img src="assets/images/nerve.png" alt="Stroke Symptoms Telugu" class="w-full h-full object-cover">
+        </div>
+        <div class="md:w-1/2 p-8">
+          <h3 class="text-2xl font-semibold text-blue-700 mb-2">లక్షణాలు</h3>
+          <ul class="list-disc ml-6 mb-4 space-y-1">
+            <li>శరీరంలోని ఒకవైపు బలహీనత లేదా నొప్పి లేకపోవడం</li>
+            <li>మాటలాడటంలో లేదా అర్థం చేసుకోవడంలో ఇబ్బంది</li>
+            <li>ఒక కంటిలో లేదా రెండు కళ్లలో చూపు తగ్గిపోవడం</li>
+            <li>నడవడంలో లేదా సంతులనం కోల్పోవడం</li>
+            <li>తీవ్రమైన తలనొప్పి</li>
+          </ul>
+        </div>
+      </div>
 
-      <h3 class="text-xl font-semibold text-blue-700 mt-6 mb-2">లక్షణాలు</h3>
-      <ul class="list-disc ml-6 mb-4">
-        <li>శరీరంలోని ఒకవైపు బలహీనత లేదా నొప్పి లేకపోవడం</li>
-        <li>మాటలాడటంలో లేదా అర్థం చేసుకోవడంలో ఇబ్బంది</li>
-        <li>ఒక కంటిలో లేదా రెండు కళ్లలో చూపు తగ్గిపోవడం</li>
-        <li>నడవడంలో లేదా సంతులనం కోల్పోవడం</li>
-        <li>తీవ్రమైన తలనొప్పి</li>
-      </ul>
+      <!-- తక్షణ చర్యలు -->
+      <div class="flex flex-col md:flex-row items-center bg-white shadow-md rounded-2xl overflow-hidden">
+        <div class="md:w-1/2">
+          <img src="assets/images/strokehelp.png" alt="Emergency Telugu" class="w-full h-full object-cover">
+        </div>
+        <div class="md:w-1/2 p-8">
+          <h3 class="text-2xl font-semibold text-blue-700 mb-2">తక్షణ చర్యలు</h3>
+          <p class="text-lg mb-4">
+            లక్షణాలు గమనించిన వెంటనే <strong>FAST</strong> గుర్తుంచుకోండి —
+            <strong>Face drooping, Arm weakness, Speech difficulty, Time to hospital.</strong>
+            వెంటనే ఆసుపత్రికి తీసుకెళ్లండి.
+          </p>
+          <h3 class="text-2xl font-semibold text-blue-700 mb-2">గోల్డెన్ టైమ్ (విండో పీరియడ్)</h3>
+          <p class="text-lg mb-4">
+            రోగి <strong>4.5 గంటలలోపు</strong> ఆసుపత్రికి చేరుకుంటే చికిత్స అత్యంత ప్రభావవంతంగా ఉంటుంది.
+          </p>
+        </div>
+      </div>
 
-      <h3 class="text-xl font-semibold text-blue-700 mt-6 mb-2">తక్షణ చర్యలు</h3>
-      <p class="text-lg mb-4">
-        లక్షణాలు గమనించిన వెంటనే <strong>FAST</strong> గుర్తుంచుకోండి — 
-        <strong>Face drooping, Arm weakness, Speech difficulty, Time to hospital.</strong> 
-        వెంటనే ఆసుపత్రికి తీసుకెళ్లండి.
-      </p>
-
-      <h3 class="text-xl font-semibold text-blue-700 mt-6 mb-2">గోల్డెన్ టైమ్ (విండో పీరియడ్)</h3>
-      <p class="text-lg mb-4">
-        రోగి <strong>4.5 గంటలలోపు</strong> ఆసుపత్రికి చేరుకుంటే చికిత్స అత్యంత ప్రభావవంతంగా ఉంటుంది.
-      </p>
-
-      <h3 class="text-xl font-semibold text-blue-700 mt-6 mb-2">ఆశ్విని న్యూరో సెంటర్ లో చికిత్స</h3>
-      <p class="text-lg mb-8">
-        మా ఆసుపత్రిలో 24/7 స్ట్రోక్ ఎమర్జెన్సీ సేవలు, ఆధునిక స్కానింగ్, 
-        క్లోట్ తొలగింపు (థ్రాంబొలైసిస్), మరియు అనుభవజ్ఞులైన న్యూరాలజిస్టులు అందుబాటులో ఉంటారు.
-      </p>
-
-      <h2 class="text-2xl font-bold text-gray-900 mb-4">🧠 న్యూరో సంబంధిత సమస్యలు</h2>
-      <ul class="list-disc ml-6 space-y-1">
-        <li>ప్రకాశవాతం (Stroke)</li>
-        <li>ఫిట్స్ (Epilepsy)</li>
-        <li>తలనొప్పి (Headache)</li>
-        <li>మెడనొప్పి (Neck Pain)</li>
-        <li>నడుము నొప్పి (Back Pain)</li>
-        <li>తిమ్మిర్లు (Numbness)</li>
-        <li>పక్షవాతం (Paralysis)</li>
-        <li>జ్ఞాపకశక్తి లోపం (Memory Loss)</li>
-        <li>నడకలో ఇబ్బంది (Difficulty in Walking)</li>
-        <li>చేతులు, కాళ్ళ నొప్పి (Pain in Hands and Legs)</li>
-        <li>మరచిపోవడం (Forgetfulness)</li>
-        <li>నాడీ సమస్యలు (Nerve Problems)</li>
-        <li>నిద్ర లేమి (Sleep Disorders)</li>
-        <li>చక్రం తిరుగడం (Giddiness / Vertigo)</li>
-      </ul>
+      <!-- చికిత్స -->
+      <div class="flex flex-col md:flex-row items-center bg-white shadow-md rounded-2xl overflow-hidden">
+        <div class="md:w-1/2">
+          <img src="assets/images/hospital.png" alt="Ashwini Neuro Telugu" class="w-full h-full object-cover">
+        </div>
+        <div class="md:w-1/2 p-8">
+          <h3 class="text-2xl font-semibold text-blue-700 mb-2">ఆశ్విని న్యూరో సెంటర్ లో చికిత్స</h3>
+          <p class="text-lg mb-4">
+            మా ఆసుపత్రిలో 24/7 స్ట్రోక్ ఎమర్జెన్సీ సేవలు, ఆధునిక స్కానింగ్,
+            క్లోట్ తొలగింపు (థ్రాంబొలైసిస్), మరియు అనుభవజ్ఞులైన న్యూరాలజిస్టులు అందుబాటులో ఉంటారు.
+          </p>
+          <h3 class="text-2xl font-bold text-blue-700 mb-3">🧠 న్యూరో సంబంధిత సమస్యలు</h3>
+          <ul class="list-disc ml-6 space-y-1">
+            <li>ఫిట్స్ (Epilepsy)</li><li>తలనొప్పి (Headache)</li>
+            <li>మెడనొప్పి (Neck Pain)</li><li>నడుము నొప్పి (Back Pain)</li><li>తిమ్మిర్లు (Numbness)</li>
+            <li>పక్షవాతం (Paralysis)</li><li>జ్ఞాపకశక్తి లోపం (Memory Loss)</li>
+            <li>నడకలో ఇబ్బంది (Difficulty in Walking)</li><li>చేతులు, కాళ్ళ నొప్పి (Pain in Hands and Legs)</li>
+            <li>మరచిపోవడం (Forgetfulness)</li><li>నాడీ సమస్యలు (Nerve Problems)</li>
+            <li>నిద్ర లేమి (Sleep Disorders)</li><li>చక్రం తిరుగడం (Giddiness / Vertigo)</li>
+          </ul>
+        </div>
+      </div>
     </div>
   </main>
 
   <!-- ✅ FOOTER -->
-  <footer class="bg-blue-700 text-white text-center py-4">
+  <footer class="bg-blue-700 text-white text-center py-5 mt-10">
     <p class="text-sm">
-      <span class="font-semibold text-red-300">Emergency Contact:</span> 
+      <span class="font-semibold text-yellow-300">Emergency Contact:</span> 
       0861-2320388 , 8885429580
     </p>
-    <p class="text-xs mt-1 opacity-80">© 2025 Ashwini Neuro Center. All Rights Reserved.</p>
+    <p class="text-xs mt-1 opacity-90">© 2025 Ashwini Neuro Center. All Rights Reserved.</p>
   </footer>
 
-  <!-- ✅ LANGUAGE SWITCH SCRIPT -->
+  <!-- ✅ LANGUAGE SCRIPT -->
   <script>
     const langSelect = document.getElementById('languageSelect');
     const english = document.getElementById('english-content');
