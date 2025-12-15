@@ -236,6 +236,25 @@ const langSelect = document.getElementById("langSelect");
 const savedLang = localStorage.getItem("userLang") || "en";
 langSelect.value = savedLang;
 
+// ✅ APPLY language on initial page load (ADD THIS)
+const t = translations[savedLang];
+
+document.getElementById("title").textContent = t.title;
+document.getElementById("consultingTitle").textContent = t.consulting;
+document.getElementById("nextLabel").textContent = t.nextLabel;
+document.getElementById("trackButton").textContent = t.track;
+document.getElementById("emergencyAlert").textContent = t.alert;
+
+document.querySelectorAll("#opBookingBtn span, #opBookingBtnMobile span")
+  .forEach(el => el.textContent = t.opBooking);
+
+document.querySelectorAll("#serviceBtn span, #serviceBtnMobile span")
+  .forEach(el => el.textContent = t.service);
+
+document.querySelectorAll("#adminBtn span")
+  .forEach(el => el.textContent = t.admin);
+
+
 langSelect.addEventListener("change", e => {
   const lang = e.target.value;
   localStorage.setItem("userLang", lang);
